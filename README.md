@@ -2,7 +2,9 @@
 
 # <image src="Assets/icon-pic.png" height="32"/> 自定义文本输出工具
 
-#### **Custom-Text-Display-Tool**
+### **Custom-Text-Display-Tool**
+
+#### 在 LCD 大屏顶端正中央输出自定义的文本，可用于显示提示信息、联系方式等。
 
 作者QQ: 2068364343
 

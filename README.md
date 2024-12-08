@@ -10,6 +10,8 @@
 
 [![Release](https://img.shields.io/github/v/release/WilsonHuangDev/Custom-Text-Display-Tool?style=flat-round&color=%233fb950&label=Release)](https://github.com/WilsonHuangDev/Custom-Text-Display-Tool/releases/latest)
 
+![软件截图](Assets/app-image.png)
+
 </div>
 
 <br>

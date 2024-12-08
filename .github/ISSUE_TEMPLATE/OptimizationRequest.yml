@@ -17,11 +17,9 @@ body:
       label: 检查清单
       description: 在开始反馈这个问题之前，请先检查：
       options:
-        - label: 我已更新到最新版 [Release](https://github.com/WilsonHuangDev/bsdnsxx-classisland-mgmt-cfg/releases/latest) ，确认我想要的功能还没有实现。
+        - label: 我已更新到最新版 [Release](https://github.com/WilsonHuangDev/Custom-Text-Display-Tool/releases/latest) ，确认我想要的功能还没有实现。
           required: true
-        - label: 我已在 [Issues](https://github.com/WilsonHuangDev/bsdnsxx-classisland-mgmt-cfg/issues?q=label%3A优化) 中检索，确认我想要的功能未被提交过。
-          required: true
-        - label: 该功能是与北京师范大学南山附属学校 ClassIsland 集控相关的，不是 ClassIsland 软件本体的新功能。
+        - label: 我已在 [Issues](https://github.com/WilsonHuangDev/Custom-Text-Display-Tool/issues?q=label%3A优化) 中检索，确认我想要的功能未被提交过。
           required: true
   - type: textarea
     id: back

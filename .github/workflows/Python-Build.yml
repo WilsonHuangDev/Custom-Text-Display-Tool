@@ -17,7 +17,8 @@ jobs:
     - name: Set up 32-bit Python
       uses: actions/setup-python@v2
       with:
-        python-version: '3.8.10-32'
+        python-version: '3.8.10'
+        architecture: 'x86'
 
     - name: Install dependencies
       run: |

@@ -28,10 +28,21 @@ jobs:
         pip install wxPython
  
     - name: Build EXE
-      run: pyinstaller --onefile -w CustomTextDisplayTool.py
+      run: |
+        pyinstaller --onefile -w CustomTextDisplayTool.py
 
     - name: Upload EXE
       uses: actions/upload-artifact@v4.4.3
       with:
-        name: executable
+        name: exe
         path: dist/CustomTextDisplayTool.exe
+
+    - name: Commit and push the EXE file back to the repository
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        git add dist/CustomTextDisplayTool.exe
+        git commit -m "Add generated EXE file"
+        git push
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

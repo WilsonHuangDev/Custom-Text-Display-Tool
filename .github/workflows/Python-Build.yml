@@ -29,18 +29,19 @@ jobs:
       run: |
         pyinstaller --onefile -w CustomTextDisplayTool.py
 
-    - name: Upload EXE
-      uses: actions/upload-artifact@v4.4.3
-      with:
-        name: Executable
-        path: dist/CustomTextDisplayTool.exe
+    - name: Configure SSH
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan github.com >> ~/.ssh/known_hosts
 
-    - name: Commit and push the EXE file back to the repository
+    - name: Commit and push the EXE file to the repository
       run: |
         git config --global user.name 'github-actions[bot]'
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
         git add dist/CustomTextDisplayTool.exe
         git commit -m "Add generated EXE file"
-        git push
+        git push git@github.com:WilsonHuangDev/Custom-Text-Display-Tool.git main
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GIT_SSH_COMMAND: 'ssh -i ~/.ssh/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'

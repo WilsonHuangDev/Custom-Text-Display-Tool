@@ -30,7 +30,7 @@ jobs:
         pyinstaller --onefile -w CustomTextDisplayTool.py
 
     - name: Upload EXE to GitHub Actions
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: CustomTextDisplayTool-exe
         path: dist/CustomTextDisplayTool.exe

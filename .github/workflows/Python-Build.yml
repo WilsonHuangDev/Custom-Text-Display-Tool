@@ -1,33 +1,39 @@
 name: Python-Build
- 
+
 on:
   workflow_dispatch:
 
   pull_request:
     branches:
     - main
- 
+
 jobs:
-  build:
+  Build:
     runs-on: windows-latest
- 
+
     steps:
     - uses: actions/checkout@v2
- 
-    - name: Set up Python
+
+    - name: Set up 32-bit Python
       uses: actions/setup-python@v2
       with:
-        python-version: 3.8
- 
+        python-version: '3.8.10-32'
+
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install pyinstaller
         pip install wxPython
- 
+
     - name: Build EXE
       run: |
         pyinstaller --onefile -w CustomTextDisplayTool.py
+
+    - name: Upload EXE to GitHub Actions
+      uses: actions/upload-artifact@v2
+      with:
+        name: CustomTextDisplayTool-exe
+        path: dist/CustomTextDisplayTool.exe
 
     - name: Configure SSH
       run: |
@@ -35,7 +41,6 @@ jobs:
         echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
         ssh-keyscan github.com >> ~/.ssh/known_hosts
-        ssh -vT git@github.com
 
     - name: Commit and push the EXE file to the repository
       run: |
@@ -46,3 +51,5 @@ jobs:
         git push git@github.com:WilsonHuangDev/Custom-Text-Display-Tool.git main
       env:
         GIT_SSH_COMMAND: 'ssh -i ~/.ssh/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
+
+    

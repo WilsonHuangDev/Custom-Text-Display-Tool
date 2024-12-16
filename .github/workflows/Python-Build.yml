@@ -1,4 +1,4 @@
-name: Python-Build
+name: Python Build and Release
 
 on:
   workflow_dispatch:
@@ -63,8 +63,7 @@ jobs:
         rm CustomTextDisplayTool/bin -Recurse -Force
         mkdir -p CustomTextDisplayTool/bin
         cp -r dist/CustomTextDisplayTool/* CustomTextDisplayTool/bin/
-        git add dist/CustomTextDisplayTool.exe
-        git add CustomTextDisplayTool/bin/
+        git add dist/CustomTextDisplayTool.exe CustomTextDisplayTool/bin
         git commit -m "Add generated EXE file"
         git push git@github.com:WilsonHuangDev/Custom-Text-Display-Tool.git main
       env:

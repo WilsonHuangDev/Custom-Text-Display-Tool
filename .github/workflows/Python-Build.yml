@@ -12,7 +12,7 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
 
     - name: Set up 32-bit Python
       uses: actions/setup-python@v2
@@ -29,12 +29,19 @@ jobs:
     - name: Build EXE
       run: |
         pyinstaller --onefile -w CustomTextDisplayTool.py
+        pyinstaller -w CustomTextDisplayTool.py
 
-    - name: Upload EXE to GitHub Actions
+    - name: Upload onefile EXE to GitHub Actions
       uses: actions/upload-artifact@v4
       with:
         name: CustomTextDisplayTool-exe
         path: dist/CustomTextDisplayTool.exe
+
+    - name: Upload EXE to GitHub Actions
+      uses: actions/upload-artifact@v4
+      with:
+        name: CustomTextDisplayTool
+        path: dist/CustomTextDisplayTool/
 
     - name: Configure SSH
       run: |
@@ -43,11 +50,24 @@ jobs:
         chmod 600 ~/.ssh/id_rsa
         ssh-keyscan github.com >> ~/.ssh/known_hosts
 
-    - name: Commit and push the EXE file to the repository
+    - name: Commit and push the onefile EXE to the repository
       run: |
         git config --global user.name 'github-actions[bot]'
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
         git add dist/CustomTextDisplayTool.exe
+        git commit -m "Add generated EXE file"
+        git push git@github.com:WilsonHuangDev/Custom-Text-Display-Tool.git main
+      env:
+        GIT_SSH_COMMAND: 'ssh -i ~/.ssh/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
+
+    - name: Commit and push the EXE to the repository
+      run: |
+        mkdir -p CustomTextDisplayTool
+        cp -r dist/CustomTextDisplayTool/* CustomTextDisplayTool/bin/
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        git add dist/CustomTextDisplayTool
+        git add CustomTextDisplayTool/bin/
         git commit -m "Add generated EXE file"
         git push git@github.com:WilsonHuangDev/Custom-Text-Display-Tool.git main
       env:

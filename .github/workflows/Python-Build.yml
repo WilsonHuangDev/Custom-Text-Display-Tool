@@ -28,7 +28,7 @@ jobs:
 
     - name: Build EXE
       run: |
-        rm -rf dist
+        rm dist -Recurse -Force
         pyinstaller --onefile -w CustomTextDisplayTool.py
         pyinstaller -w CustomTextDisplayTool.py
 
@@ -60,7 +60,7 @@ jobs:
 
     - name: Commit and push the EXE to the repository
       run: |
-        rm -rf CustomTextDisplayTool/bin
+        rm CustomTextDisplayTool/bin -Recurse -Force
         mkdir -p CustomTextDisplayTool/bin
         cp -r dist/CustomTextDisplayTool/* CustomTextDisplayTool/bin/
         git add dist/CustomTextDisplayTool.exe

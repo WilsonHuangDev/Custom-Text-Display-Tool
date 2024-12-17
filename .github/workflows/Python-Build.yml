@@ -32,11 +32,17 @@ jobs:
         pyinstaller --onefile -w CustomTextDisplayTool.py
         pyinstaller -w CustomTextDisplayTool.py
 
+    - name: Package onefile EXE
+      run: |
+        cd dist
+        Compress-Archive -Path ./CustomTextDisplayTool.exe -DestinationPath ../CustomTextDisplayTool-Onefile.zip
+        echo 'Successfully packaged "CustomTextDisplayTool-Onefile".'
+
     - name: Upload onefile EXE to GitHub Actions
       uses: actions/upload-artifact@v4
       with:
-        name: CustomTextDisplayTool-exe
-        path: dist/CustomTextDisplayTool.exe
+        name: CustomTextDisplayTool-Onefile
+        path: CustomTextDisplayTool-Onefile.zip
 
     - name: Upload EXE to GitHub Actions
       uses: actions/upload-artifact@v4
@@ -68,3 +74,62 @@ jobs:
         git push git@github.com:WilsonHuangDev/Custom-Text-Display-Tool.git main
       env:
         GIT_SSH_COMMAND: 'ssh -i ~/.ssh/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
+
+  Release:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v4
+  
+    - name: Make dir
+      run: |
+        mkdir release
+        mkdir setup
+  
+    - name: Download Build Artifact CustomTextDisplayTool-Onefile
+      uses: actions/download-artifact@v4.1.8
+      with:
+        name: CustomTextDisplayTool-Onefile
+        path: release
+
+    - name: Copy CustomTextDisplayTool from Repository
+      run: |
+        cp -r CustomTextDisplayTool setup/
+        echo 'Successfully copyed.'
+
+    - name: Install NSIS
+      run: |
+        'NSIS/nsis-3.08-setup.exe' /S /D=D:\a\Custom-Text-Display-Tool\Custom-Text-Display-Tool\NSIS308
+        echo 'Installed successfully.'
+
+    - name: Create Installer
+      run: |
+        NSIS308/makensis.exe NSIS/CustomTextDisplayTool.nsi
+        echo 'Created successfully.'
+        cp -r NSIS/CustomTextDisplayTool_Setup.exe release/
+
+    - name: Upload Installer to GitHub Actions
+      uses: actions/upload-artifact@v4
+      with:
+        name: CustomTextDisplayTool-Installer
+        path: release/CustomTextDisplayTool_Setup.exe
+
+    - name: Calculate checksums
+      run: pwsh .github/workflows/generate-sha256.ps1 release/
+
+    - name: Print files from release dir
+      run: ls release
+
+    - name: Create Release
+      uses: ncipollo/release-action@v1
+      with:
+        artifacts: |
+          release/*.zip
+          release/*.exe
+        draft: true
+        bodyFile: release/checksums.md
+        token: ${{ secrets.GITHUB_TOKEN }}
+        tag: ${{ github.ref_name }}
+        allowUpdates: true
+        omitBodyDuringUpdate: true
+        omitNameDuringUpdate: true

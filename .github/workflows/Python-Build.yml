@@ -55,8 +55,8 @@ jobs:
         mkdir -p ~/.ssh
         echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' > ~/.ssh/id_rsa
         echo "${{ secrets.SSH_SIGNING_KEY }}" | tr -d '\r' > ~/.ssh/id_rsa.pub
-        chmod 600 ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa.pub
+        icacls ~/.ssh/id_rsa /inheritance:r /grant:r "$($env:USERNAME):(R,W)"
+        icacls ~/.ssh/id_rsa.pub /inheritance:r /grant:r "$($env:USERNAME):(R,W)"
         ssh-keyscan github.com >> ~/.ssh/known_hosts
         git config --global user.name 'github-actions[bot]'
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
@@ -102,7 +102,7 @@ jobs:
 
     - name: Install NSIS
       run: |
-        'NSIS/nsis-3.08-setup.exe' /S /D=D:\a\Custom-Text-Display-Tool\Custom-Text-Display-Tool\NSIS308
+        Start-Process -FilePath 'NSIS\nsis-3.08-setup.exe' -ArgumentList '/S', '/D=D:\a\Custom-Text-Display-Tool\Custom-Text-Display-Tool\NSIS308' -NoNewWindow -Wait
         echo 'Installed successfully.'
 
     - name: Create Installer

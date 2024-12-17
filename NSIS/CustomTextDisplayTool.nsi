@@ -2,7 +2,7 @@
 
 ; 安装程序初始定义常量
 !define PRODUCT_NAME "自定义文本输出工具"
-!define PRODUCT_VERSION "2.7.0.1206"
+!define PRODUCT_VERSION "2.7"
 !define PRODUCT_PUBLISHER "Wilson.Huang"
 !define PRODUCT_WEB_SITE "https://github.com/WilsonHuangDev/Custom-Text-Display-Tool"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\CustomTextDisplayTool.exe"
@@ -31,7 +31,7 @@ SetCompressor lzma
 !insertmacro MUI_PAGE_WELCOME
 ; 许可协议页面
 !define MUI_LICENSEPAGE_RADIOBUTTONS
-!insertmacro MUI_PAGE_LICENSE "CustomTextDisplayTool\LICENCE.rtf"
+!insertmacro MUI_PAGE_LICENSE "..\CustomTextDisplayTool\LICENCE.rtf"
 ; 安装目录选择页面
 !insertmacro MUI_PAGE_DIRECTORY
 ; 安装过程页面
@@ -70,7 +70,7 @@ SetCompressor lzma
 
 ; ------ MUI 现代界面定义结束 ------
 
-Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
+Name "${PRODUCT_NAME}"
 OutFile "CustomTextDisplayTool_Setup.exe"
 InstallDir "$PROGRAMFILES\CustomTextDisplayTool"
 InstallDirRegKey HKLM "${PRODUCT_UNINST_KEY}" "UninstallString"
@@ -81,41 +81,41 @@ BrandingText "CustomTextDisplayTool"
 Section "Main" SEC01
   SetOutPath "$INSTDIR"
   SetOverwrite on
-  File "CustomTextDisplayTool\README.rtf"
-  File "CustomTextDisplayTool\LICENCE.rtf"
+  File "..\CustomTextDisplayTool\README.rtf"
+  File "..\CustomTextDisplayTool\LICENCE.rtf"
   SetOutPath "$INSTDIR\Assets"
-  File "CustomTextDisplayTool\Assets\icon.ico"
+  File "..\CustomTextDisplayTool\Assets\icon.ico"
   SetOutPath "$INSTDIR\Bin"
-  File "CustomTextDisplayTool\Bin\CustomTextDisplayTool.exe"
+  File "..\CustomTextDisplayTool\Bin\CustomTextDisplayTool.exe"
   CreateDirectory "$SMPROGRAMS\自定义文本输出工具"
   CreateShortCut "$SMPROGRAMS\自定义文本输出工具\自定义文本输出工具.lnk" "$INSTDIR\Bin\CustomTextDisplayTool.exe"
   CreateShortCut "$SMPROGRAMS\自定义文本输出工具\Github 仓库.lnk" "${PRODUCT_WEB_SITE}"
   CreateShortCut "$SMPROGRAMS\自定义文本输出工具\自述文件.lnk" "$INSTDIR\README.rtf"
   CreateShortCut "$DESKTOP\自定义文本输出工具.lnk" "$INSTDIR\Bin\CustomTextDisplayTool.exe"
   SetOutPath "$INSTDIR\Bin\_internal"
-  File "CustomTextDisplayTool\Bin\_internal\base_library.zip"
-  File "CustomTextDisplayTool\Bin\_internal\libcrypto-1_1.dll"
-  File "CustomTextDisplayTool\Bin\_internal\python38.dll"
-  File "CustomTextDisplayTool\Bin\_internal\select.pyd"
-  File "CustomTextDisplayTool\Bin\_internal\unicodedata.pyd"
-  File "CustomTextDisplayTool\Bin\_internal\VCRUNTIME140.dll"
+  File "..\CustomTextDisplayTool\Bin\_internal\base_library.zip"
+  File "..\CustomTextDisplayTool\Bin\_internal\libcrypto-1_1.dll"
+  File "..\CustomTextDisplayTool\Bin\_internal\python38.dll"
+  File "..\CustomTextDisplayTool\Bin\_internal\select.pyd"
+  File "..\CustomTextDisplayTool\Bin\_internal\unicodedata.pyd"
+  File "..\CustomTextDisplayTool\Bin\_internal\VCRUNTIME140.dll"
   SetOutPath "$INSTDIR\Bin\_internal\wx"
-  File "CustomTextDisplayTool\Bin\_internal\wx\MSVCP140.dll"
-  File "CustomTextDisplayTool\Bin\_internal\wx\siplib.cp38-win32.pyd"
-  File "CustomTextDisplayTool\Bin\_internal\wx\VCRUNTIME140.dll"
-  File "CustomTextDisplayTool\Bin\_internal\wx\wxbase32u_net_vc140.dll"
-  File "CustomTextDisplayTool\Bin\_internal\wx\wxbase32u_vc140.dll"
-  File "CustomTextDisplayTool\Bin\_internal\wx\wxmsw32u_core_vc140.dll"
-  File "CustomTextDisplayTool\Bin\_internal\wx\wxmsw32u_html_vc140.dll"
-  File "CustomTextDisplayTool\Bin\_internal\wx\_adv.cp38-win32.pyd"
-  File "CustomTextDisplayTool\Bin\_internal\wx\_core.cp38-win32.pyd"
-  File "CustomTextDisplayTool\Bin\_internal\wx\_html.cp38-win32.pyd"
-  File "CustomTextDisplayTool\Bin\_internal\wx\_msw.cp38-win32.pyd"
+  File "..\CustomTextDisplayTool\Bin\_internal\wx\MSVCP140.dll"
+  File "..\CustomTextDisplayTool\Bin\_internal\wx\siplib.cp38-win32.pyd"
+  File "..\CustomTextDisplayTool\Bin\_internal\wx\VCRUNTIME140.dll"
+  File "..\CustomTextDisplayTool\Bin\_internal\wx\wxbase32u_net_vc140.dll"
+  File "..\CustomTextDisplayTool\Bin\_internal\wx\wxbase32u_vc140.dll"
+  File "..\CustomTextDisplayTool\Bin\_internal\wx\wxmsw32u_core_vc140.dll"
+  File "..\CustomTextDisplayTool\Bin\_internal\wx\wxmsw32u_html_vc140.dll"
+  File "..\CustomTextDisplayTool\Bin\_internal\wx\_adv.cp38-win32.pyd"
+  File "..\CustomTextDisplayTool\Bin\_internal\wx\_core.cp38-win32.pyd"
+  File "..\CustomTextDisplayTool\Bin\_internal\wx\_html.cp38-win32.pyd"
+  File "..\CustomTextDisplayTool\Bin\_internal\wx\_msw.cp38-win32.pyd"
   SetOutPath "$INSTDIR\Bin\_internal"
-  File "CustomTextDisplayTool\Bin\_internal\_bz2.pyd"
-  File "CustomTextDisplayTool\Bin\_internal\_hashlib.pyd"
-  File "CustomTextDisplayTool\Bin\_internal\_lzma.pyd"
-  File "CustomTextDisplayTool\Bin\_internal\_socket.pyd"
+  File "..\CustomTextDisplayTool\Bin\_internal\_bz2.pyd"
+  File "..\CustomTextDisplayTool\Bin\_internal\_hashlib.pyd"
+  File "..\CustomTextDisplayTool\Bin\_internal\_lzma.pyd"
+  File "..\CustomTextDisplayTool\Bin\_internal\_socket.pyd"
 SectionEnd
 
 Section -AdditionalIcons

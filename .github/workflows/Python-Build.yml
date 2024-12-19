@@ -92,21 +92,15 @@ jobs:
     steps:
     - uses: actions/checkout@v4
   
-    - name: Make dir
+    - name: Make release dir
       run: |
         mkdir release
-        mkdir setup
   
     - name: Download Build Artifact CustomTextDisplayTool-Onefile
       uses: actions/download-artifact@v4.1.8
       with:
         name: CustomTextDisplayTool-Onefile
         path: release
-
-    - name: Copy CustomTextDisplayTool from Repository
-      run: |
-        cp -r CustomTextDisplayTool setup/
-        ls setup -Recurse -Force
 
     - name: Install NSIS
       run: |

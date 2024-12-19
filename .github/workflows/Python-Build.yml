@@ -64,13 +64,21 @@ jobs:
         git config --global gpg.format ssh
         git config --global commit.gpgSign true
 
+    - name: Commit and push the Onefile EXE to the repository
+      run: |
+        git add dist/CustomTextDisplayTool.exe
+        git commit -m "Add generated Onefile EXE"
+        git push git@github.com:WilsonHuangDev/Custom-Text-Display-Tool.git main
+      env:
+        GIT_SSH_COMMAND: 'ssh -i ~/.ssh/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
+
     - name: Commit and push the EXE to the repository
       run: |
         rm CustomTextDisplayTool/bin -Recurse -Force
         mkdir -p CustomTextDisplayTool/bin
         cp -r dist/CustomTextDisplayTool/* CustomTextDisplayTool/bin/
-        git add dist/CustomTextDisplayTool.exe CustomTextDisplayTool/bin
-        git commit -m "Add generated EXE file"
+        git CustomTextDisplayTool/bin
+        git commit -m "Add generated EXE files"
         git push git@github.com:WilsonHuangDev/Custom-Text-Display-Tool.git main
       env:
         GIT_SSH_COMMAND: 'ssh -i ~/.ssh/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
@@ -98,7 +106,7 @@ jobs:
     - name: Copy CustomTextDisplayTool from Repository
       run: |
         cp -r CustomTextDisplayTool setup/
-        echo 'Successfully copyed.'
+        ls setup -Recurse -Force
 
     - name: Install NSIS
       run: |
@@ -120,7 +128,7 @@ jobs:
       run: pwsh .github/workflows/generate-sha256.ps1 release/
 
     - name: Print files from release dir
-      run: ls release
+      run: ls release -Recurse -Force
 
     - name: Create Release
       uses: ncipollo/release-action@v1

@@ -2,7 +2,6 @@
 
 ; 安装程序初始定义常量
 !define PRODUCT_NAME "自定义文本输出工具"
-!define PRODUCT_VERSION "2.7"
 !define PRODUCT_PUBLISHER "Wilson.Huang"
 !define PRODUCT_WEB_SITE "https://github.com/WilsonHuangDev/Custom-Text-Display-Tool"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\CustomTextDisplayTool.exe"
@@ -63,7 +62,7 @@ SetCompressor lzma
                    nsProcess::_KillProcess "CustomTextDisplayTool.exe"
                    Goto end
           label_cancel:
-                   Abort
+									 Abort
     ${EndIf}
     end:
 !macroend
@@ -87,11 +86,11 @@ Section "Main" SEC01
   File "..\CustomTextDisplayTool\Assets\icon.ico"
   SetOutPath "$INSTDIR\Bin"
   File "..\CustomTextDisplayTool\Bin\CustomTextDisplayTool.exe"
+  CreateShortCut "$DESKTOP\自定义文本输出工具.lnk" "$INSTDIR\Bin\CustomTextDisplayTool.exe"
   CreateDirectory "$SMPROGRAMS\自定义文本输出工具"
   CreateShortCut "$SMPROGRAMS\自定义文本输出工具\自定义文本输出工具.lnk" "$INSTDIR\Bin\CustomTextDisplayTool.exe"
   CreateShortCut "$SMPROGRAMS\自定义文本输出工具\Github 仓库.lnk" "${PRODUCT_WEB_SITE}"
   CreateShortCut "$SMPROGRAMS\自定义文本输出工具\自述文件.lnk" "$INSTDIR\README.rtf"
-  CreateShortCut "$DESKTOP\自定义文本输出工具.lnk" "$INSTDIR\Bin\CustomTextDisplayTool.exe"
   SetOutPath "$INSTDIR\Bin\_internal"
   File "..\CustomTextDisplayTool\Bin\_internal\base_library.zip"
   File "..\CustomTextDisplayTool\Bin\_internal\libcrypto-1_1.dll"
@@ -129,7 +128,6 @@ Section -Post
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayName" "${PRODUCT_NAME}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "UninstallString" "$INSTDIR\uninst.exe"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayIcon" "$INSTDIR\Bin\CustomTextDisplayTool.exe"
-  WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayVersion" "${PRODUCT_VERSION}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "URLInfoAbout" "${PRODUCT_WEB_SITE}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "Publisher" "${PRODUCT_PUBLISHER}"
 SectionEnd
@@ -173,13 +171,13 @@ Section Uninstall
   Delete "$SMPROGRAMS\自定义文本输出工具\Github 仓库.lnk"
   Delete "$SMPROGRAMS\自定义文本输出工具\自述文件.lnk"
 
-  RMDir "$SMPROGRAMS\自定义文本输出工具"
-  RMDir "$INSTDIR\Bin\_internal\wx"
-  RMDir "$INSTDIR\Bin\_internal"
-  RMDir "$INSTDIR\Bin"
-  RMDir "$APPDATA\CustomTextDisplayTool"
+  RMDir /r "$SMPROGRAMS\自定义文本输出工具"
+  RMDir /r "$INSTDIR\Bin\_internal\wx"
+  RMDir /r "$INSTDIR\Bin\_internal"
+  RMDir /r "$INSTDIR\Bin"
+  RMDir /r "$APPDATA\CustomTextDisplayTool"
 
-  RMDir "$INSTDIR"
+  RMDir /r "$INSTDIR"
 
   DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
   DeleteRegKey HKLM "${PRODUCT_DIR_REGKEY}"
@@ -191,8 +189,6 @@ SectionEnd
 Var UNINSTALL_PROG
 
 Function .onInit
-	;检查指定程序是否在运行
-  !insertmacro FindProcessAndKill
   ClearErrors
   ReadRegStr $UNINSTALL_PROG ${PRODUCT_UNINST_ROOT_KEY} ${PRODUCT_UNINST_KEY} "UninstallString"
   IfErrors  done
@@ -203,20 +199,18 @@ Function .onInit
       /SD IDYES \
       IDYES uninstall \
       IDNO cancel
-  Abort
+	Abort
 
 uninstall:
-  CreateDirectory $TEMP
-  CopyFiles $UNINSTALL_PROG "$TEMP\uninst.exe"
-
-  ExecWait '"$TEMP\uninst.exe" /S _?=$TEMP' $0
+	CreateDirectory "$TEMP"
+	CopyFiles "$INSTDIR\uninst.exe" "$TEMP"
+  ExecWait '"$TEMP\uninst.exe" _?=$INSTDIR' $0
   DetailPrint "uninst.exe returned $0"
-  Delete "$TEMP\uninst.exe"
 	Goto  done
 
 cancel:
 	MessageBox MB_ICONSTOP|MB_OK "$(^Name) 已取消安装。"
-  Quit
+	Abort
 
 done:
 FunctionEnd

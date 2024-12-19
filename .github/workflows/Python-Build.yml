@@ -74,10 +74,10 @@ jobs:
 
     - name: Commit and push the EXE to the repository
       run: |
-        rm CustomTextDisplayTool/bin -Recurse -Force
-        mkdir -p CustomTextDisplayTool/bin
-        cp -r dist/CustomTextDisplayTool/* CustomTextDisplayTool/bin/
-        git add CustomTextDisplayTool/bin/ CustomTextDisplayTool/bin/**/
+        rm CustomTextDisplayTool/Bin -Recurse -Force
+        mkdir -p CustomTextDisplayTool/Bin
+        cp -r dist/CustomTextDisplayTool/* CustomTextDisplayTool/Bin/
+        git add CustomTextDisplayTool/Bin/
         git commit -m "Add generated EXE files"
         git push git@github.com:WilsonHuangDev/Custom-Text-Display-Tool.git main
       env:

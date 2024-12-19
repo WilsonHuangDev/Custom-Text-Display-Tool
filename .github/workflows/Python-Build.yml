@@ -108,7 +108,6 @@ jobs:
     - name: Create Installer
       run: |
         Start-Process -FilePath 'NSIS308/makensis.exe' -ArgumentList 'NSIS/CustomTextDisplayTool.nsi' -NoNewWindow -Wait
-        echo 'Created successfully.'
         cp -r NSIS/CustomTextDisplayTool_Setup.exe release/
 
     - name: Upload Installer to GitHub Actions

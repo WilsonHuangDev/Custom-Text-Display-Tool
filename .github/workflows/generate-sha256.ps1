@@ -25,7 +25,7 @@ echo $hashes
 
 $json = ConvertTo-Json $hashes -Compress
 
-$summary +=  "`n<!-- CLASSISLAND_PKG_SHA256 ${json} -->" 
+$summary +=  "`n<!-- CUSTOM-TEXT-DISPLAY-TOOL_PKG_SHA256 ${json} -->" 
 echo $summary > "$path/checksums.md"
 Write-Host "SHA-256 Summary:" -ForegroundColor Gray
 Write-Host $summary -ForegroundColor Gray

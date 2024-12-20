@@ -1,14 +1,14 @@
 <div align="center">
 
-# <image src="Assets/icon-pic.png" height="32"/> 自定义文本输出工具
+# <image src="Assets/icon-pic.png" height="45"/> 自定义文本输出工具
 
-### **Custom-Text-Display-Tool**
+### Custom-Text-Display-Tool
 
 #### 在 LCD 大屏顶端正中央输出自定义的文本，可用于显示提示信息、联系方式等。
 
-作者QQ: 2068364343
-
 [![Release](https://img.shields.io/github/v/release/WilsonHuangDev/Custom-Text-Display-Tool?style=flat-round&color=%233fb950&label=Release)](https://github.com/WilsonHuangDev/Custom-Text-Display-Tool/releases/latest)
+
+<br>
 
 ![软件截图 主界面](Assets/app-image1.png)
 <br>
@@ -68,9 +68,25 @@ bilibili 主页：[点击访问](https://space.bilibili.com/1056060818)
 > >
 > > 2.4 [app-image2.png](Assets/app-image2.png): 软件截图(输出窗口)
 >
-> 3 [CustomTextDisplayTool 文件夹](CustomTextDisplayTool): 软件主体
+> 3 [CustomTextDisplayTool 文件夹](CustomTextDisplayTool): 本软件目录
+>
+> > 3.1 [Assets 文件夹](CustomTextDisplayTool/Assets): 软件配套图标目录
+> >
+> > > 3.1.1 [icon.ico](CustomTextDisplayTool/Assets/icon.ico): Logo Icon
+> >
+> > 3.2 [Bin 文件夹](CustomTextDisplayTool/Bin): 软件主体目录
+> >
+> > > 3.2.1 [_internal 文件夹](CustomTextDisplayTool/Bin/_internal): 软件运行库目录
+> > >
+> > > 3.2.2 [CustomTextDisplayTool.exe](CustomTextDisplayTool/Bin/CustomTextDisplayTool.exe): 软件可执行程序
+> >
+> > 3.3 [LICENCE.rtf](CustomTextDisplayTool/LICENCE.rtf): 软件开源许可证&版权
+> >
+> > 3.4 [README.rtf](CustomTextDisplayTool/README.rtf): 软件自述文档
 >
 > 4 [dist 文件夹](dist): 软件单文件版本构建目录
+>
+> > 4.1 [CustomTextDisplayTool.exe](dist/CustomTextDisplayTool.exe): 软件单文件版可执行程序
 >
 > 5 [NSIS 文件夹](NSIS): NSIS 软件及安装包打包脚本目录
 > 

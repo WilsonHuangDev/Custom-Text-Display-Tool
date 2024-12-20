@@ -64,20 +64,12 @@ jobs:
         git config --global gpg.format ssh
         git config --global commit.gpgSign true
 
-    - name: Commit and push the Onefile EXE to the repository
-      run: |
-        git add dist/CustomTextDisplayTool.exe
-        git commit -m "Add generated Onefile EXE"
-        git push git@github.com:WilsonHuangDev/Custom-Text-Display-Tool.git main
-      env:
-        GIT_SSH_COMMAND: 'ssh -i ~/.ssh/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
-
     - name: Commit and push the EXE to the repository
       run: |
         rm CustomTextDisplayTool/Bin -Recurse -Force
         mkdir -p CustomTextDisplayTool/Bin
         cp -r dist/CustomTextDisplayTool/* CustomTextDisplayTool/Bin/
-        git add CustomTextDisplayTool/Bin/
+        git add dist/CustomTextDisplayTool.exe CustomTextDisplayTool/Bin/ CustomTextDisplayTool/Bin/*/
         git commit -m "Add generated EXE files"
         git push git@github.com:WilsonHuangDev/Custom-Text-Display-Tool.git main
       env:

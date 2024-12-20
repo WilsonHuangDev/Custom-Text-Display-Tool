@@ -69,7 +69,9 @@ jobs:
         rm CustomTextDisplayTool/Bin -Recurse -Force
         mkdir -p CustomTextDisplayTool/Bin
         cp -r dist/CustomTextDisplayTool/* CustomTextDisplayTool/Bin/
-        git add dist/CustomTextDisplayTool.exe CustomTextDisplayTool/Bin/ CustomTextDisplayTool/Bin/*/
+        git add 'dist/CustomTextDisplayTool.exe'
+        git add 'CustomTextDisplayTool/Bin/'
+        git add 'CustomTextDisplayTool/Bin/**/'
         git commit -m "Add generated EXE files"
         git push git@github.com:WilsonHuangDev/Custom-Text-Display-Tool.git main
       env:

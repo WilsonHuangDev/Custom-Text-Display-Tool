@@ -1,64 +1,64 @@
-; ¸Ã½Å±¾Ê¹ÓÃ HM VNISEdit ½Å±¾±à¼­Æ÷Ïòµ¼²úÉú
+; è¯¥è„šæœ¬ä½¿ç”¨ HM VNISEdit è„šæœ¬ç¼–è¾‘å™¨å‘å¯¼äº§ç”Ÿ
 
-; °²×°³ÌĞò³õÊ¼¶¨Òå³£Á¿
-!define PRODUCT_NAME "×Ô¶¨ÒåÎÄ±¾Êä³ö¹¤¾ß"
+; å®‰è£…ç¨‹åºåˆå§‹å®šä¹‰å¸¸é‡
+!define PRODUCT_NAME "è‡ªå®šä¹‰æ–‡æœ¬è¾“å‡ºå·¥å…·"
 !define PRODUCT_PUBLISHER "Wilson.Huang"
 !define PRODUCT_WEB_SITE "https://github.com/WilsonHuangDev/Custom-Text-Display-Tool"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\CustomTextDisplayTool.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
 
-Unicode False
+Unicode True
 SetCompressor lzma
 
-; ------ MUI ÏÖ´ú½çÃæ¶¨Òå (1.67 °æ±¾ÒÔÉÏ¼æÈİ) ------
+; ------ MUI ç°ä»£ç•Œé¢å®šä¹‰ (1.67 ç‰ˆæœ¬ä»¥ä¸Šå…¼å®¹) ------
 !include "MUI.nsh"
 !include "nsProcess.nsh"
 
-; MUI Ô¤¶¨Òå³£Á¿
+; MUI é¢„å®šä¹‰å¸¸é‡
 !define MUI_ABORTWARNING
 !define MUI_ICON "${NSISDIR}\Contrib\Graphics\Icons\orange-install.ico"
 !define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\orange-uninstall.ico"
-;ĞŞ¸Ä×ó²àÍ¼Æ¬
+;ä¿®æ”¹å·¦ä¾§å›¾ç‰‡
 !define MUI_WELCOMEFINISHPAGE_BITMAP "${NSISDIR}\Contrib\Graphics\Wizard\nsis3-metro.bmp"
 !define MUI_UNWELCOMEFINISHPAGE_BITMAP "${NSISDIR}\Contrib\Graphics\Wizard\orange-uninstall.bmp"
-;ĞŞ¸ÄHeadÍ¼Æ¬
+;ä¿®æ”¹Headå›¾ç‰‡
 !define MUI_HEADERIMAGE
 !define MUI_HEADERIMAGE_BITMAP "${NSISDIR}\Contrib\Graphics\Header\orange.bmp"
 !define MUI_HEADERIMAGE_UNBITMAP "${NSISDIR}\Contrib\Graphics\Header\orange-uninstall.bmp"
 
-; »¶Ó­Ò³Ãæ
+; æ¬¢è¿é¡µé¢
 !insertmacro MUI_PAGE_WELCOME
-; Ğí¿ÉĞ­ÒéÒ³Ãæ
+; è®¸å¯åè®®é¡µé¢
 !define MUI_LICENSEPAGE_RADIOBUTTONS
 !insertmacro MUI_PAGE_LICENSE "..\CustomTextDisplayTool\LICENCE.rtf"
-; °²×°Ä¿Â¼Ñ¡ÔñÒ³Ãæ
+; å®‰è£…ç›®å½•é€‰æ‹©é¡µé¢
 !insertmacro MUI_PAGE_DIRECTORY
-; °²×°¹ı³ÌÒ³Ãæ
+; å®‰è£…è¿‡ç¨‹é¡µé¢
 !insertmacro MUI_PAGE_INSTFILES
-; °²×°Íê³ÉÒ³Ãæ
+; å®‰è£…å®Œæˆé¡µé¢
 !define MUI_FINISHPAGE_RUN "$INSTDIR\Bin\CustomTextDisplayTool.exe"
 !define MUI_FINISHPAGE_SHOWREADME "$INSTDIR\README.rtf"
 !insertmacro MUI_PAGE_FINISH
 
-; °²×°Ğ¶ÔØ¹ı³ÌÒ³Ãæ
+; å®‰è£…å¸è½½è¿‡ç¨‹é¡µé¢
 !insertmacro MUI_UNPAGE_INSTFILES
 
-; °²×°½çÃæ°üº¬µÄÓïÑÔÉèÖÃ
+; å®‰è£…ç•Œé¢åŒ…å«çš„è¯­è¨€è®¾ç½®
 !insertmacro MUI_LANGUAGE "English"
 !insertmacro MUI_LANGUAGE "SimpChinese"
 
-; °²×°Ô¤ÊÍ·ÅÎÄ¼ş
+; å®‰è£…é¢„é‡Šæ”¾æ–‡ä»¶
 !insertmacro MUI_RESERVEFILE_INSTALLOPTIONS
 
-;±àĞ´Macro£¬ÓÃÓÚÅĞ¶Ï°²×°»òĞ¶ÔØ³ÌĞòÊ±Ö¸¶¨³ÌĞòÊÇ·ñÔÚÔËĞĞ£¬²¢ÌáÊ¾ÊÇ·ñÇ¿ÖÆ¹Ø±Õ¼ÌĞø°²×°
+;ç¼–å†™Macroï¼Œç”¨äºåˆ¤æ–­å®‰è£…æˆ–å¸è½½ç¨‹åºæ—¶æŒ‡å®šç¨‹åºæ˜¯å¦åœ¨è¿è¡Œï¼Œå¹¶æç¤ºæ˜¯å¦å¼ºåˆ¶å…³é—­ç»§ç»­å®‰è£…
 !macro FindProcessAndKill
     StrCpy $1 "CustomTextDisplayTool.exe"
     nsProcess::_FindProcess "$1"
     Pop $R0
     ${If} $R0 = 0
           MessageBox MB_OKCANCEL|MB_ICONQUESTION   \
-                     "°²×°³ÌĞò¼ì²âµ½ ${PRODUCT_NAME} ÕıÔÚÔËĞĞ¡£$\r$\n$\r$\nµã»÷ ¡°È·¶¨¡± Ç¿ÖÆ¹Ø±Õ${PRODUCT_NAME}£¬¼ÌĞø°²×°¡£$\r$\n$\r$\nµã»÷ ¡°È¡Ïû¡± ÍË³ö°²×°³ÌĞò¡£" \
+                     "å®‰è£…ç¨‹åºæ£€æµ‹åˆ° ${PRODUCT_NAME} æ­£åœ¨è¿è¡Œã€‚$\r$\n$\r$\nç‚¹å‡» â€œç¡®å®šâ€ å¼ºåˆ¶å…³é—­${PRODUCT_NAME}ï¼Œç»§ç»­å®‰è£…ã€‚$\r$\n$\r$\nç‚¹å‡» â€œå–æ¶ˆâ€ é€€å‡ºå®‰è£…ç¨‹åºã€‚" \
                      /SD IDOK IDOK label_ok IDCANCEL label_cancel
           label_ok:
                    nsProcess::_KillProcess "CustomTextDisplayTool.exe"
@@ -69,7 +69,7 @@ SetCompressor lzma
     end:
 !macroend
 
-; ------ MUI ÏÖ´ú½çÃæ¶¨Òå½áÊø ------
+; ------ MUI ç°ä»£ç•Œé¢å®šä¹‰ç»“æŸ ------
 
 Name "${PRODUCT_NAME}"
 OutFile "CustomTextDisplayTool_Setup.exe"
@@ -88,11 +88,11 @@ Section "Main" SEC01
   File "..\CustomTextDisplayTool\Assets\icon.ico"
   SetOutPath "$INSTDIR\Bin"
   File "..\CustomTextDisplayTool\Bin\CustomTextDisplayTool.exe"
-  CreateShortCut "$DESKTOP\×Ô¶¨ÒåÎÄ±¾Êä³ö¹¤¾ß.lnk" "$INSTDIR\Bin\CustomTextDisplayTool.exe"
-  CreateDirectory "$SMPROGRAMS\×Ô¶¨ÒåÎÄ±¾Êä³ö¹¤¾ß"
-  CreateShortCut "$SMPROGRAMS\×Ô¶¨ÒåÎÄ±¾Êä³ö¹¤¾ß\×Ô¶¨ÒåÎÄ±¾Êä³ö¹¤¾ß.lnk" "$INSTDIR\Bin\CustomTextDisplayTool.exe"
-  CreateShortCut "$SMPROGRAMS\×Ô¶¨ÒåÎÄ±¾Êä³ö¹¤¾ß\Github ²Ö¿â.lnk" "${PRODUCT_WEB_SITE}"
-  CreateShortCut "$SMPROGRAMS\×Ô¶¨ÒåÎÄ±¾Êä³ö¹¤¾ß\×ÔÊöÎÄ¼ş.lnk" "$INSTDIR\README.rtf"
+  CreateShortCut "$DESKTOP\è‡ªå®šä¹‰æ–‡æœ¬è¾“å‡ºå·¥å…·.lnk" "$INSTDIR\Bin\CustomTextDisplayTool.exe"
+  CreateDirectory "$SMPROGRAMS\è‡ªå®šä¹‰æ–‡æœ¬è¾“å‡ºå·¥å…·"
+  CreateShortCut "$SMPROGRAMS\è‡ªå®šä¹‰æ–‡æœ¬è¾“å‡ºå·¥å…·\è‡ªå®šä¹‰æ–‡æœ¬è¾“å‡ºå·¥å…·.lnk" "$INSTDIR\Bin\CustomTextDisplayTool.exe"
+  CreateShortCut "$SMPROGRAMS\è‡ªå®šä¹‰æ–‡æœ¬è¾“å‡ºå·¥å…·\Github ä»“åº“.lnk" "${PRODUCT_WEB_SITE}"
+  CreateShortCut "$SMPROGRAMS\è‡ªå®šä¹‰æ–‡æœ¬è¾“å‡ºå·¥å…·\è‡ªè¿°æ–‡ä»¶.lnk" "$INSTDIR\README.rtf"
   SetOutPath "$INSTDIR\Bin\_internal"
   File "..\CustomTextDisplayTool\Bin\_internal\base_library.zip"
   File "..\CustomTextDisplayTool\Bin\_internal\libcrypto-1_1.dll"
@@ -121,7 +121,7 @@ SectionEnd
 
 Section -AdditionalIcons
   SetOutPath $INSTDIR
-  CreateShortCut "$SMPROGRAMS\×Ô¶¨ÒåÎÄ±¾Êä³ö¹¤¾ß\Ğ¶ÔØ.lnk" "$INSTDIR\uninst.exe"
+  CreateShortCut "$SMPROGRAMS\è‡ªå®šä¹‰æ–‡æœ¬è¾“å‡ºå·¥å…·\å¸è½½.lnk" "$INSTDIR\uninst.exe"
 SectionEnd
 
 Section -Post
@@ -135,7 +135,7 @@ Section -Post
 SectionEnd
 
 /******************************
- *  ÒÔÏÂÊÇ°²×°³ÌĞòµÄĞ¶ÔØ²¿·Ö  *
+ *  ä»¥ä¸‹æ˜¯å®‰è£…ç¨‹åºçš„å¸è½½éƒ¨åˆ†  *
  ******************************/
 
 Section Uninstall
@@ -167,13 +167,13 @@ Section Uninstall
   Delete "$INSTDIR\README.rtf"
   Delete "$APPDATA\CustomTextDisplayTool\config.json"
 
-  Delete "$SMPROGRAMS\×Ô¶¨ÒåÎÄ±¾Êä³ö¹¤¾ß\Ğ¶ÔØ.lnk"
-  Delete "$SMPROGRAMS\×Ô¶¨ÒåÎÄ±¾Êä³ö¹¤¾ß\×Ô¶¨ÒåÎÄ±¾Êä³ö¹¤¾ß.lnk"
-  Delete "$DESKTOP\×Ô¶¨ÒåÎÄ±¾Êä³ö¹¤¾ß.lnk"
-  Delete "$SMPROGRAMS\×Ô¶¨ÒåÎÄ±¾Êä³ö¹¤¾ß\Github ²Ö¿â.lnk"
-  Delete "$SMPROGRAMS\×Ô¶¨ÒåÎÄ±¾Êä³ö¹¤¾ß\×ÔÊöÎÄ¼ş.lnk"
+  Delete "$SMPROGRAMS\è‡ªå®šä¹‰æ–‡æœ¬è¾“å‡ºå·¥å…·\å¸è½½.lnk"
+  Delete "$SMPROGRAMS\è‡ªå®šä¹‰æ–‡æœ¬è¾“å‡ºå·¥å…·\è‡ªå®šä¹‰æ–‡æœ¬è¾“å‡ºå·¥å…·.lnk"
+  Delete "$DESKTOP\è‡ªå®šä¹‰æ–‡æœ¬è¾“å‡ºå·¥å…·.lnk"
+  Delete "$SMPROGRAMS\è‡ªå®šä¹‰æ–‡æœ¬è¾“å‡ºå·¥å…·\Github ä»“åº“.lnk"
+  Delete "$SMPROGRAMS\è‡ªå®šä¹‰æ–‡æœ¬è¾“å‡ºå·¥å…·\è‡ªè¿°æ–‡ä»¶.lnk"
 
-  RMDir /r "$SMPROGRAMS\×Ô¶¨ÒåÎÄ±¾Êä³ö¹¤¾ß"
+  RMDir /r "$SMPROGRAMS\è‡ªå®šä¹‰æ–‡æœ¬è¾“å‡ºå·¥å…·"
   RMDir /r "$INSTDIR\Bin\_internal\wx"
   RMDir /r "$INSTDIR\Bin\_internal"
   RMDir /r "$INSTDIR\Bin"
@@ -186,7 +186,7 @@ Section Uninstall
   SetAutoClose true
 SectionEnd
 
-#-- ¸ù¾İ NSIS ½Å±¾±à¼­¹æÔò£¬ËùÓĞ Function Çø¶Î±ØĞë·ÅÖÃÔÚ Section Çø¶ÎÖ®ºó±àĞ´£¬ÒÔ±ÜÃâ°²×°³ÌĞò³öÏÖÎ´¿ÉÔ¤ÖªµÄÎÊÌâ¡£--#
+#-- æ ¹æ® NSIS è„šæœ¬ç¼–è¾‘è§„åˆ™ï¼Œæ‰€æœ‰ Function åŒºæ®µå¿…é¡»æ”¾ç½®åœ¨ Section åŒºæ®µä¹‹åç¼–å†™ï¼Œä»¥é¿å…å®‰è£…ç¨‹åºå‡ºç°æœªå¯é¢„çŸ¥çš„é—®é¢˜ã€‚--#
 
 Var UNINSTALL_PROG
 
@@ -196,8 +196,8 @@ Function .onInit
   IfErrors  done
 
   MessageBox MB_YESNO|MB_ICONQUESTION \
-    "¼ì²âµ½ÒÑ¾­°²×°ÁË ${PRODUCT_NAME}¡£\
-    $\n$\nÊÇ·ñÏÈĞ¶ÔØÒÑ°²×°µÄ°æ±¾£¿" \
+    "æ£€æµ‹åˆ°å·²ç»å®‰è£…äº† ${PRODUCT_NAME}ã€‚\
+    $\n$\næ˜¯å¦å…ˆå¸è½½å·²å®‰è£…çš„ç‰ˆæœ¬ï¼Ÿ" \
       /SD IDYES \
       IDYES uninstall \
       IDNO cancel
@@ -211,20 +211,20 @@ uninstall:
 	Goto  done
 
 cancel:
-	MessageBox MB_ICONSTOP|MB_OK "$(^Name) ÒÑÈ¡Ïû°²×°¡£"
+	MessageBox MB_ICONSTOP|MB_OK "$(^Name) å·²å–æ¶ˆå®‰è£…ã€‚"
 	Abort
 
 done:
 FunctionEnd
 
 Function un.onInit
-	;¼ì²éÖ¸¶¨³ÌĞòÊÇ·ñÔÚÔËĞĞ
+	;æ£€æŸ¥æŒ‡å®šç¨‹åºæ˜¯å¦åœ¨è¿è¡Œ
   !insertmacro FindProcessAndKill
-  MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "ÄúÈ·ÊµÒªÍêÈ«ÒÆ³ı $(^Name) £¬¼°ÆäËùÓĞµÄ×é¼ş£¿" IDYES +2
+  MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "æ‚¨ç¡®å®è¦å®Œå…¨ç§»é™¤ $(^Name) ï¼ŒåŠå…¶æ‰€æœ‰çš„ç»„ä»¶ï¼Ÿ" IDYES +2
   Abort
 FunctionEnd
 
 Function un.onUninstSuccess
   HideWindow
-  MessageBox MB_ICONINFORMATION|MB_OK "$(^Name) ÒÑ³É¹¦µØ´ÓÄúµÄ¼ÆËã»úÒÆ³ı¡£"
+  MessageBox MB_ICONINFORMATION|MB_OK "$(^Name) å·²æˆåŠŸåœ°ä»æ‚¨çš„è®¡ç®—æœºç§»é™¤ã€‚"
 FunctionEnd

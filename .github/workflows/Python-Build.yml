@@ -102,7 +102,7 @@ jobs:
 
     - name: Create Installer
       run: |
-        Start-Process -FilePath 'C:/Program Files (x86)/NSIS/makensis.exe' -ArgumentList '/INPUTCHARSET UTF8','NSIS/CustomTextDisplayTool.nsi' -NoNewWindow -Wait
+        Start-Process -FilePath 'C:/Program Files (x86)/NSIS/makensis.exe' -ArgumentList 'NSIS/CustomTextDisplayTool.nsi' -NoNewWindow -Wait
         cp -r NSIS/CustomTextDisplayTool_Setup.exe release/
 
     - name: Upload Installer to GitHub Actions

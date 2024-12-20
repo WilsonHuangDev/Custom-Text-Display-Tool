@@ -1,4 +1,4 @@
-; 该脚本使用 HM VNISEdit 脚本编辑器向导产生
+﻿; 该脚本使用 HM VNISEdit 脚本编辑器向导产生
 
 ; 安装程序初始定义常量
 !define PRODUCT_NAME "自定义文本输出工具"

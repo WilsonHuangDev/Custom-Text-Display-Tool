@@ -1,6 +1,4 @@
-﻿; 该脚本使用 HM VNISEdit 脚本编辑器向导产生
-
-; 安装程序初始定义常量
+﻿; 安装程序初始定义常量
 !define PRODUCT_NAME "自定义文本输出工具"
 !define PRODUCT_PUBLISHER "Wilson.Huang"
 !define PRODUCT_WEB_SITE "https://github.com/WilsonHuangDev/Custom-Text-Display-Tool"
@@ -196,7 +194,7 @@ Function .onInit
   IfErrors  done
 
   MessageBox MB_YESNO|MB_ICONQUESTION \
-    "检测到已经安装了 ${PRODUCT_NAME}。\
+    "检测到已经安装了 ${PRODUCT_NAME} 。\
     $\n$\n是否先卸载已安装的版本？" \
       /SD IDYES \
       IDYES uninstall \
@@ -204,15 +202,16 @@ Function .onInit
 	Abort
 
 uninstall:
-	CreateDirectory "$TEMP"
-	CopyFiles "$INSTDIR\uninst.exe" "$TEMP"
+  CreateDirectory "$TEMP"
+  CopyFiles "$INSTDIR\uninst.exe" "$TEMP"
   ExecWait '"$TEMP\uninst.exe" _?=$INSTDIR' $0
   DetailPrint "uninst.exe returned $0"
-	Goto  done
+  Delete "$TEMP\uninst.exe"
+  Goto  done
 
 cancel:
-	MessageBox MB_ICONSTOP|MB_OK "$(^Name) 已取消安装。"
-	Abort
+  MessageBox MB_ICONSTOP|MB_OK "$(^Name) 已取消安装。"
+  Abort
 
 done:
 FunctionEnd

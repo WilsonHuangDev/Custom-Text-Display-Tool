@@ -28,7 +28,7 @@ jobs:
 
     - name: Build EXE
       run: |
-        rm dist -Recurse -Force
+        rm dist -Recurse -Force -ErrorAction Continue
         pyinstaller --onefile -w -i Assets\icon.ico CustomTextDisplayTool.py
         pyinstaller -w -i Assets\icon.ico CustomTextDisplayTool.py
 
@@ -66,7 +66,7 @@ jobs:
 
     - name: Commit and push the EXE to the repository
       run: |
-        rm "CustomTextDisplayTool/Bin" -Recurse -Force
+        rm "CustomTextDisplayTool/Bin" -Recurse -Force -ErrorAction Continue
         mkdir -p "CustomTextDisplayTool/Bin"
         Copy-Item -Path "dist/CustomTextDisplayTool/*" -Destination "CustomTextDisplayTool/Bin" -Recurse -Force
         ls CustomTextDisplayTool -Recurse -Force

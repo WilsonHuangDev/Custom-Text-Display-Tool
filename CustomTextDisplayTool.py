@@ -6,7 +6,7 @@ import sys
 
 class MyApp(wx.App):
     def OnInit(self):
-        self.inputframe = InputFrame(None, title="自定义文本输出工具 v2.7.0.1206")
+        self.inputframe = InputFrame(None, title="自定义文本输出工具 v2.8.0.1226")
         self.inputframe.Show()
         return True
 
@@ -137,6 +137,7 @@ class InputFrame(wx.Frame):
         
         # 创建一个新的TemplateFrame实例
         self.templateframe = TemplateFrame(self, title="模版编辑")
+        self.templateframe.load_data(event)
         self.templateframe.Show()
 
     def load_template(self, event):
@@ -151,7 +152,7 @@ class InputFrame(wx.Frame):
 
             config_path = self.templateframe.get_config_path()
             if os.path.exists(config_path):
-                print("配置文件位置：", config_path)
+                print("配置文件位置: ", config_path)
                 with open(config_path, "r") as f:
                     loaded_data = json.load(f)
                     self.text_ctrl.SetValue(loaded_data["text_value"])
@@ -162,7 +163,7 @@ class InputFrame(wx.Frame):
                     self.color_label.SetForegroundColour(loaded_color)
                     self.Refresh()
             else:
-                print("配置文件位置：", config_path, "未找到模板配置文件")
+                print("配置文件位置: ", config_path, "未找到模板配置文件")
                 wx.MessageBox("未找到模板配置文件!", "警告", wx.OK | wx.ICON_WARNING)
         except Exception as e:
             print("模板加载失败:", e)
@@ -180,7 +181,7 @@ class InputFrame(wx.Frame):
 
     def on_close(self, event):
         # 弹出一个对话框询问用户是否要退出
-        dlg = wx.MessageDialog(self, "是否确定退出本程序?", "退出程序", wx.YES_NO | wx.ICON_QUESTION)
+        dlg = wx.MessageDialog(self, "是否退出程序？", "退出程序", wx.YES_NO)
         result = dlg.ShowModal()
         dlg.Destroy()
         
@@ -197,7 +198,7 @@ class TemplateFrame(wx.Frame):
         super().__init__(
             parent,
             title=title,
-            size=(640, 600),
+            size=(640, 580),
             style=wx.CAPTION,
         )
         self.panel = wx.Panel(self)
@@ -243,31 +244,25 @@ class TemplateFrame(wx.Frame):
 
         # 填充默认模版按钮
         self.use_button = wx.Button(
-            self.panel, label="填充默认模版", pos=(200, 490), size=(80, -1)
+            self.panel, label="填充默认模版", pos=(170, 500), size=(80, -1)
         )
         self.use_button.Bind(wx.EVT_BUTTON, self.template_text)
 
         # 保存模版按钮
         self.submit_button = wx.Button(
-            self.panel, label="保存模版", pos=(330, 490), size=(80, -1)
+            self.panel, label="保存模版", pos=(270, 500), size=(80, -1)
         )
         self.submit_button.Bind(wx.EVT_BUTTON, self.on_save)
 
-        # 加载模版按钮
-        self.load_button = wx.Button(
-            self.panel, label="加载模版", pos=(200, 520), size=(80, -1)
-        )
-        self.load_button.Bind(wx.EVT_BUTTON, self.load_data)
-
         # 删除模版按钮
         self.del_button = wx.Button(
-            self.panel, label="删除模版", pos=(330, 520), size=(80, -1)
+            self.panel, label="删除模版", pos=(370, 500), size=(80, -1)
         )
         self.del_button.Bind(wx.EVT_BUTTON, self.del_custom_template)
 
         # 关闭按钮
         self.hide_button = wx.Button(
-            self.panel, label="关闭", pos=(520, 520), size=(80, -1)
+            self.panel, label="关闭", pos=(520, 500), size=(80, -1)
         )
         self.hide_button.Bind(wx.EVT_BUTTON, self.hide_Template_Frame)
 
@@ -317,11 +312,21 @@ class TemplateFrame(wx.Frame):
     def del_custom_template(self, event):
         config_path = self.get_config_path()
         if os.path.exists(config_path):
-            print("配置文件位置：", config_path)
+            print("配置文件位置: ", config_path)
             os.remove(config_path)
+
+            # 清空模板编辑窗口的内容
+            self.text_ctrl.SetValue("")
+            self.font_size_input.SetValue(18)
+            self.font_weight_combo.SetSelection(0)
+            template_color = self.string_to_color(str("#000000"))
+            self.color_label.SetForegroundColour(template_color)
+            self.Refresh()
+            
             wx.MessageBox("模版删除成功!", "提示", wx.OK | wx.ICON_INFORMATION)
+        
         else:
-            print("配置文件位置：", config_path, "未找到模板配置文件")
+            print("配置文件位置: ", config_path, "未找到模板配置文件")
             wx.MessageBox("未找到模板配置文件!", "警告", wx.OK | wx.ICON_WARNING)
 
     def get_config_path(self):
@@ -334,7 +339,7 @@ class TemplateFrame(wx.Frame):
     def save_template(self, data):
         try:
             config_path = self.get_config_path()
-            print("配置文件位置：", config_path)
+            print("配置文件位置: ", config_path)
             with open(config_path, "w") as f:
                 json.dump(data, f)
             wx.MessageBox("模版保存成功!", "提示", wx.OK | wx.ICON_INFORMATION)
@@ -349,7 +354,7 @@ class TemplateFrame(wx.Frame):
         try:
             config_path = self.get_config_path()
             if os.path.exists(config_path):
-                print("配置文件位置：", config_path)
+                print("配置文件位置: ", config_path)
                 with open(config_path, "r") as f:
                     loaded_data = json.load(f)
                     self.text_ctrl.SetValue(loaded_data["text_value"])
@@ -359,9 +364,6 @@ class TemplateFrame(wx.Frame):
                     print("模板字体颜色:", loaded_color)
                     self.color_label.SetForegroundColour(loaded_color)
                     self.Refresh()
-            else:
-                print("配置文件位置：", config_path, "未找到模板配置文件")
-                wx.MessageBox("未找到模板配置文件!", "警告", wx.OK | wx.ICON_WARNING)
         except Exception as e:
             print("模板加载失败:", e)
             wx.MessageBox("模板加载失败!", "错误", wx.OK | wx.ICON_ERROR)

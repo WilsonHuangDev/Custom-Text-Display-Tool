@@ -70,9 +70,9 @@ jobs:
         ls CustomTextDisplayTool -Recurse -Force
         git add -v 'CustomTextDisplayTool\Bin/\*'
         git commit -m "Add generated EXE files"
-        git push origin ${{ github.ref_name }}
+        git push git@github.com:WilsonHuangDev/Custom-Text-Display-Tool.git ${{ github.ref_name }}
         Start-Sleep -Seconds 30
-        git pull origin main
+        git pull git@github.com:WilsonHuangDev/Custom-Text-Display-Tool.git ${{ github.ref_name }}
         Start-Sleep -Seconds 30
       env:
         GIT_SSH_COMMAND: 'ssh -i ~/.ssh/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'

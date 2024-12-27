@@ -6,7 +6,7 @@ import sys
 
 class MyApp(wx.App):
     def OnInit(self):
-        self.inputframe = InputFrame(None, title="自定义文本输出工具 v2.7.0.1206")
+        self.inputframe = InputFrame(None, title="自定义文本输出工具 v2.8.0.1226")
         self.inputframe.Show()
         return True
 
@@ -19,9 +19,13 @@ class InputFrame(wx.Frame):
             size=(640, 600),
             style=wx.CAPTION
             | wx.SYSTEM_MENU
-            | wx.MINIMIZE_BOX,
+            | wx.MINIMIZE_BOX
+            | wx.CLOSE_BOX,
         )
         self.panel = wx.Panel(self)
+
+        # 绑定关闭事件到 on_close 方法
+        self.Bind(wx.EVT_CLOSE, self.on_close)
 
         # 文本输入框
         self.text_ctrl = wx.TextCtrl(
@@ -35,7 +39,6 @@ class InputFrame(wx.Frame):
         self.font_size_input = wx.SpinCtrl(
             self.panel, value="18", min=8, max=100, pos=(75, 415), size=(60, -1)
         )
-        self.font_size_input.Bind(wx.EVT_SPINCTRL, self.on_font_size_change)
 
         # 字体粗细选择
         self.font_weight_label = wx.StaticText(
@@ -46,7 +49,6 @@ class InputFrame(wx.Frame):
             self.panel, choices=self.font_weight_choices, pos=(305, 415), size=(60, -1)
         )
         self.font_weight_combo.SetSelection(0)
-        self.font_weight_combo.Bind(wx.EVT_COMBOBOX, self.on_font_weight_change)
 
         # 字体颜色选择
         self.font_color_label = wx.StaticText(
@@ -83,8 +85,7 @@ class InputFrame(wx.Frame):
         )
         self.submit_button.Bind(wx.EVT_BUTTON, self.show_custom_message)
 
-        self.outputwindow = OutputWindow(None, title="")
-        self.outputwindow.Show(False)
+        self.outputwindow = None
 
         # 隐藏按钮
         self.hide_button = wx.Button(
@@ -92,46 +93,37 @@ class InputFrame(wx.Frame):
         )
         self.hide_button.Bind(wx.EVT_BUTTON, self.hide_custom_message)
 
-        # 退出程序按钮
-        self.hide_button = wx.Button(
-            self.panel, label="退出程序", pos=(520, 520), size=(80, -1)
-        )
-        self.hide_button.Bind(wx.EVT_BUTTON, self.exit)
-
     def on_select_color(self, event):
         color_data = wx.ColourData()
         dialog = wx.ColourDialog(self, data=color_data)
         if dialog.ShowModal() == wx.ID_OK:
             color = dialog.GetColourData().GetColour()
             self.color_label.SetForegroundColour(color)
+            output_color = self.color_label.GetForegroundColour()
+            print(output_color)
             self.Refresh()
-            self.output_color(event)
         dialog.Destroy()
 
-    def output_color(self, event):
-        output_color = self.color_label.GetForegroundColour()
-        print(output_color)
-        self.outputwindow.set_font_color(output_color)
-
-    def on_font_size_change(self, event):
-        font_size = int(self.font_size_input.GetValue())
-        font_weight = self.get_font_weight()
-        self.outputwindow.update_info(self.text_ctrl.GetValue(), font_size, font_weight)
-
-    def on_font_weight_change(self, event):
-        font_size = int(self.font_size_input.GetValue())
-        font_weight = self.get_font_weight()
-        self.outputwindow.update_info(self.text_ctrl.GetValue(), font_size, font_weight)
-
     def show_custom_message(self, event):
+        # 检查OutputWindow是否存在
+        if self.outputwindow:
+            # 如果存在，则销毁它
+            self.outputwindow.Destroy()
+        
+        # 创建一个新的OutputWindow实例
+        self.outputwindow = OutputWindow(None, title="")
+        
         custom_text = self.text_ctrl.GetValue().strip()
+        font_size = int(self.font_size_input.GetValue())
+        font_weight = self.get_font_weight()
+        output_color = self.color_label.GetForegroundColour()
         if custom_text:
+            self.outputwindow.set_font_color(output_color)
             self.outputwindow.update_info(
                 custom_text,
-                int(self.font_size_input.GetValue()),
-                self.get_font_weight(),
+                font_size,
+                font_weight,
             )
-            self.output_color(event)
             self.outputwindow.center_on_second_screen()  # 调整输出窗口居中
             self.outputwindow.Show()
         else:
@@ -144,7 +136,8 @@ class InputFrame(wx.Frame):
             self.templateframe.Destroy()
         
         # 创建一个新的TemplateFrame实例
-        self.templateframe = TemplateFrame(None, title="模版编辑")
+        self.templateframe = TemplateFrame(self, title="模版编辑")
+        self.templateframe.load_data(event)
         self.templateframe.Show()
 
     def load_template(self, event):
@@ -155,11 +148,11 @@ class InputFrame(wx.Frame):
                 self.templateframe.Destroy()
 
             # 创建一个新的TemplateFrame实例
-            self.templateframe = TemplateFrame(None, title="模版编辑")
+            self.templateframe = TemplateFrame(self, title="模版编辑")
 
             config_path = self.templateframe.get_config_path()
             if os.path.exists(config_path):
-                print("配置文件位置：", config_path)
+                print("配置文件位置: ", config_path)
                 with open(config_path, "r") as f:
                     loaded_data = json.load(f)
                     self.text_ctrl.SetValue(loaded_data["text_value"])
@@ -170,14 +163,14 @@ class InputFrame(wx.Frame):
                     self.color_label.SetForegroundColour(loaded_color)
                     self.Refresh()
             else:
-                print("配置文件位置：", config_path, "未找到模板配置文件")
+                print("配置文件位置: ", config_path, "未找到模板配置文件")
                 wx.MessageBox("未找到模板配置文件!", "警告", wx.OK | wx.ICON_WARNING)
         except Exception as e:
             print("模板加载失败:", e)
             wx.MessageBox("模板加载失败!", "错误", wx.OK | wx.ICON_ERROR)
 
     def hide_custom_message(self, event):
-        self.outputwindow.Hide()
+        self.outputwindow.Destroy()
 
     def get_font_weight(self):
         return (
@@ -186,8 +179,18 @@ class InputFrame(wx.Frame):
             else wx.FONTWEIGHT_NORMAL
         )
 
-    def exit(self, event):
-        sys.exit(0)
+    def on_close(self, event):
+        # 弹出一个对话框询问用户是否要退出
+        dlg = wx.MessageDialog(self, "是否退出程序？", "退出程序", wx.YES_NO)
+        result = dlg.ShowModal()
+        dlg.Destroy()
+        
+        if result == wx.ID_YES:
+            # 如果用户选择是，则退出应用程序
+            sys.exit(0)
+        else:
+            # 如果用户选择否，则忽略关闭事件
+            event.Veto()
 
 
 class TemplateFrame(wx.Frame):
@@ -195,9 +198,8 @@ class TemplateFrame(wx.Frame):
         super().__init__(
             parent,
             title=title,
-            size=(640, 600),
-            style=wx.CAPTION
-            | wx.FRAME_NO_TASKBAR,
+            size=(640, 580),
+            style=wx.CAPTION,
         )
         self.panel = wx.Panel(self)
 
@@ -242,31 +244,25 @@ class TemplateFrame(wx.Frame):
 
         # 填充默认模版按钮
         self.use_button = wx.Button(
-            self.panel, label="填充默认模版", pos=(200, 490), size=(80, -1)
+            self.panel, label="填充默认模版", pos=(170, 500), size=(80, -1)
         )
         self.use_button.Bind(wx.EVT_BUTTON, self.template_text)
 
         # 保存模版按钮
         self.submit_button = wx.Button(
-            self.panel, label="保存模版", pos=(330, 490), size=(80, -1)
+            self.panel, label="保存模版", pos=(270, 500), size=(80, -1)
         )
         self.submit_button.Bind(wx.EVT_BUTTON, self.on_save)
 
-        # 加载模版按钮
-        self.load_button = wx.Button(
-            self.panel, label="加载模版", pos=(200, 520), size=(80, -1)
-        )
-        self.load_button.Bind(wx.EVT_BUTTON, self.load_data)
-
         # 删除模版按钮
         self.del_button = wx.Button(
-            self.panel, label="删除模版", pos=(330, 520), size=(80, -1)
+            self.panel, label="删除模版", pos=(370, 500), size=(80, -1)
         )
         self.del_button.Bind(wx.EVT_BUTTON, self.del_custom_template)
 
         # 关闭按钮
         self.hide_button = wx.Button(
-            self.panel, label="关闭", pos=(520, 520), size=(80, -1)
+            self.panel, label="关闭", pos=(520, 500), size=(80, -1)
         )
         self.hide_button.Bind(wx.EVT_BUTTON, self.hide_Template_Frame)
 
@@ -316,11 +312,21 @@ class TemplateFrame(wx.Frame):
     def del_custom_template(self, event):
         config_path = self.get_config_path()
         if os.path.exists(config_path):
-            print("配置文件位置：", config_path)
+            print("配置文件位置: ", config_path)
             os.remove(config_path)
+
+            # 清空模板编辑窗口的内容
+            self.text_ctrl.SetValue("")
+            self.font_size_input.SetValue(18)
+            self.font_weight_combo.SetSelection(0)
+            template_color = self.string_to_color(str("#000000"))
+            self.color_label.SetForegroundColour(template_color)
+            self.Refresh()
+            
             wx.MessageBox("模版删除成功!", "提示", wx.OK | wx.ICON_INFORMATION)
+        
         else:
-            print("配置文件位置：", config_path, "未找到模板配置文件")
+            print("配置文件位置: ", config_path, "未找到模板配置文件")
             wx.MessageBox("未找到模板配置文件!", "警告", wx.OK | wx.ICON_WARNING)
 
     def get_config_path(self):
@@ -333,7 +339,7 @@ class TemplateFrame(wx.Frame):
     def save_template(self, data):
         try:
             config_path = self.get_config_path()
-            print("配置文件位置：", config_path)
+            print("配置文件位置: ", config_path)
             with open(config_path, "w") as f:
                 json.dump(data, f)
             wx.MessageBox("模版保存成功!", "提示", wx.OK | wx.ICON_INFORMATION)
@@ -348,7 +354,7 @@ class TemplateFrame(wx.Frame):
         try:
             config_path = self.get_config_path()
             if os.path.exists(config_path):
-                print("配置文件位置：", config_path)
+                print("配置文件位置: ", config_path)
                 with open(config_path, "r") as f:
                     loaded_data = json.load(f)
                     self.text_ctrl.SetValue(loaded_data["text_value"])
@@ -358,9 +364,6 @@ class TemplateFrame(wx.Frame):
                     print("模板字体颜色:", loaded_color)
                     self.color_label.SetForegroundColour(loaded_color)
                     self.Refresh()
-            else:
-                print("配置文件位置：", config_path, "未找到模板配置文件")
-                wx.MessageBox("未找到模板配置文件!", "警告", wx.OK | wx.ICON_WARNING)
         except Exception as e:
             print("模板加载失败:", e)
             wx.MessageBox("模板加载失败!", "错误", wx.OK | wx.ICON_ERROR)

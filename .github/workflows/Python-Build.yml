@@ -3,10 +3,6 @@ name: Python Build and Release
 on:
   workflow_dispatch:
 
-  pull_request:
-    branches:
-    - main
-
 jobs:
   Build:
     runs-on: windows-latest
@@ -28,7 +24,7 @@ jobs:
 
     - name: Build EXE
       run: |
-        rm dist -Recurse -Force
+        rm dist -Recurse -Force -ErrorAction Continue
         pyinstaller --onefile -w -i Assets\icon.ico CustomTextDisplayTool.py
         pyinstaller -w -i Assets\icon.ico CustomTextDisplayTool.py
 
@@ -63,16 +59,18 @@ jobs:
         git config --global user.signingkey '~/.ssh/id_rsa.pub'
         git config --global gpg.format ssh
         git config --global commit.gpgSign true
+      env:
+        GIT_SSH_COMMAND: 'ssh -i ~/.ssh/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
 
     - name: Commit and push the EXE to the repository
       run: |
-        rm "CustomTextDisplayTool/Bin" -Recurse -Force
+        rm "CustomTextDisplayTool/Bin" -Recurse -Force -ErrorAction Continue
         mkdir -p "CustomTextDisplayTool/Bin"
         Copy-Item -Path "dist/CustomTextDisplayTool/*" -Destination "CustomTextDisplayTool/Bin" -Recurse -Force
         ls CustomTextDisplayTool -Recurse -Force
         git add -v 'CustomTextDisplayTool/Bin/' 'CustomTextDisplayTool/Bin/**/'
         git commit -m "Add generated EXE files"
-        git push git@github.com:WilsonHuangDev/Custom-Text-Display-Tool.git main
+        git push git@github.com:WilsonHuangDev/Custom-Text-Display-Tool.git ${{ github.ref_name }}
       env:
         GIT_SSH_COMMAND: 'ssh -i ~/.ssh/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
 

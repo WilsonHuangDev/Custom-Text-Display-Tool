@@ -5,7 +5,7 @@ on:
 
   pull_request:
     branches:
-    - main
+      - main
 
 jobs:
   Build:
@@ -64,6 +64,22 @@ jobs:
         git config --global gpg.format ssh
         git config --global commit.gpgSign true
 
+    - name: Configure SSH
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' > ~/.ssh/id_rsa
+        echo "${{ secrets.SSH_SIGNING_KEY }}" | tr -d '\r' > ~/.ssh/id_rsa.pub
+        icacls ~/.ssh/id_rsa /inheritance:r /grant:r "$($env:USERNAME):(R,W)"
+        icacls ~/.ssh/id_rsa.pub /inheritance:r /grant:r "$($env:USERNAME):(R,W)"
+        ssh-keyscan github.com >> ~/.ssh/known_hosts
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        git config --global user.signingkey '~/.ssh/id_rsa.pub'
+        git config --global gpg.format ssh
+        git config --global commit.gpgSign true
+      env:
+        GIT_SSH_COMMAND: 'ssh -i ~/.ssh/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
+
     - name: Commit and push the EXE to the repository
       run: |
         rm "CustomTextDisplayTool/Bin" -Recurse -Force -ErrorAction Continue
@@ -72,7 +88,7 @@ jobs:
         ls CustomTextDisplayTool -Recurse -Force
         git add -v 'CustomTextDisplayTool/Bin/' 'CustomTextDisplayTool/Bin/**/'
         git commit -m "Add generated EXE files"
-        git push git@github.com:WilsonHuangDev/Custom-Text-Display-Tool.git
+        git push git@github.com:WilsonHuangDev/Custom-Text-Display-Tool.git ${{ github.ref_name }}
       env:
         GIT_SSH_COMMAND: 'ssh -i ~/.ssh/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
 

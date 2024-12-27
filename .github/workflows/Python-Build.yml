@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  Build:
+  Build-Release:
     runs-on: windows-latest
 
     steps:
@@ -30,15 +30,16 @@ jobs:
 
     - name: Package portable EXE
       run: |
+        mkdir -p release
         cd dist
-        Compress-Archive -Path ./CustomTextDisplayTool.exe -DestinationPath ../CustomTextDisplayTool_Portable.zip
+        Compress-Archive -Path ./CustomTextDisplayTool.exe -DestinationPath ../release/CustomTextDisplayTool_Portable.zip
         echo 'Successfully packaged "CustomTextDisplayTool_Portable".'
 
     - name: Upload portable EXE to GitHub Actions
       uses: actions/upload-artifact@v4
       with:
         name: CustomTextDisplayTool_Portable
-        path: CustomTextDisplayTool_Portable.zip
+        path: release/CustomTextDisplayTool_Portable.zip
 
     - name: Upload EXE to GitHub Actions
       uses: actions/upload-artifact@v4
@@ -71,30 +72,8 @@ jobs:
         git add -v 'CustomTextDisplayTool\Bin/\*'
         git commit -m "Add generated EXE files"
         git push git@github.com:WilsonHuangDev/Custom-Text-Display-Tool.git ${{ github.ref_name }}
-        Start-Sleep -Seconds 30
-        git pull git@github.com:WilsonHuangDev/Custom-Text-Display-Tool.git ${{ github.ref_name }}
-        Start-Sleep -Seconds 30
       env:
         GIT_SSH_COMMAND: 'ssh -i ~/.ssh/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
-
-  Release:
-    runs-on: windows-latest
-
-    needs:
-      - Build
-
-    steps:
-    - uses: actions/checkout@v4
-  
-    - name: Make release dir
-      run: |
-        mkdir -p release
-  
-    - name: Download Build Artifact CustomTextDisplayTool_Portable
-      uses: actions/download-artifact@v4.1.8
-      with:
-        name: CustomTextDisplayTool_Portable
-        path: release
 
     - name: Install NSIS
       run: |

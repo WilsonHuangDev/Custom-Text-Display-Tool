@@ -14,7 +14,7 @@ Bug 修复
 - 
 <br>
 
-**Full Changelog**: 
+**Full Changelog**: https://github.com/WilsonHuangDev/Custom-Text-Display-Tool/compare/
 
 ------
 > [!important]

@@ -89,7 +89,7 @@ jobs:
         git config --global gpg.format ssh
         git config --global commit.gpgSign true
       env:
-        GIT_SSH_COMMAND: 'ssh -i ~/.ssh/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
+        GIT_SSH_COMMAND: 'ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no'
 
     - name: Commit and push the EXE to the repository
       run: |
@@ -101,7 +101,7 @@ jobs:
         git commit -m "Add generated EXE files"
         git push git@github.com:WilsonHuangDev/Custom-Text-Display-Tool.git ${{ github.ref_name }}
       env:
-        GIT_SSH_COMMAND: 'ssh -i ~/.ssh/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
+        GIT_SSH_COMMAND: 'ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no'
 
     - name: Create Installer
       run: |

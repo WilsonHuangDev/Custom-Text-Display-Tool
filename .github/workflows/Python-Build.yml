@@ -32,7 +32,7 @@ jobs:
     - name: Package portable EXE
       run: |
         mkdir -p release
-        Compress-Archive -Path dist/CustomTextDisplayTool.exe -DestinationPath ../release/CustomTextDisplayTool_Portable.zip
+        Compress-Archive -Path dist/CustomTextDisplayTool.exe -DestinationPath release/CustomTextDisplayTool_Portable.zip
         echo 'Successfully packaged "CustomTextDisplayTool_Portable".'
 
     - name: Upload portable EXE to GitHub Actions

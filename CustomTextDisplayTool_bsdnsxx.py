@@ -247,7 +247,6 @@ class TemplateFrame(wx.Frame):
             self.panel, label="填充默认模版", pos=(170, 500), size=(80, -1)
         )
         self.use_button.Bind(wx.EVT_BUTTON, self.template_text)
-        self.use_button.Enable(False)
 
         # 保存模版按钮
         self.submit_button = wx.Button(
@@ -268,15 +267,13 @@ class TemplateFrame(wx.Frame):
         self.hide_button.Bind(wx.EVT_BUTTON, self.hide_Template_Frame)
 
     def template_text(self, event):
-        print("该功能无法使用!仅定制版包含此功能!")
-        wx.MessageBox("该功能无法使用!\n仅定制版包含此功能!", "错误", wx.OK | wx.ICON_ERROR)
-        # self.text_ctrl.SetValue("")
-        # self.font_size_input.SetValue(18)
-        # self.font_weight_combo.SetSelection(0)
-        # template_color = self.string_to_color(str("#000000"))
-        # print("默认模板字体颜色:", template_color)
-        # self.color_label.SetForegroundColour(template_color)
-        # self.Refresh()
+        self.text_ctrl.SetValue("如需定制播放生日歌等歌曲, 请联系九1班黄炜轩")
+        self.font_size_input.SetValue(18)
+        self.font_weight_combo.SetSelection(1)
+        template_color = self.string_to_color(str("#000000"))
+        print("默认模板字体颜色:", template_color)
+        self.color_label.SetForegroundColour(template_color)
+        self.Refresh()
 
     def on_select_color(self, event):
         color_data = wx.ColourData()

@@ -92,13 +92,15 @@ bilibili 主页：[点击访问](https://space.bilibili.com/1056060818)
 > >
 > > 5.2 [nsis-3.08-setup.exe](NSIS/nsis-3.08-setup.exe): NSIS 主程序安装包
 > 
-> 6 [CustomTextDisplayTool.py](CustomTextDisplayTool.py): 软件源代码
+> 6 [CustomTextDisplayTool.py](CustomTextDisplayTool.py): 软件通用版源代码
 > 
-> 7 [.gitignore](.gitignore): Git Ignore 配置文件
+> 7 [CustomTextDisplayTool_bsdnsxx.py](CustomTextDisplayTool_bsdnsxx.py): 软件北师大南山附校定制版源代码
+> 
+> 8 [.gitignore](.gitignore): Git Ignore 配置文件
 >
-> 8 [LICENSE](LICENSE): 本仓库开源许可证&版权
+> 9 [LICENSE](LICENSE): 本仓库开源许可证&版权
 >
-> 9 [README.md](README.md): 本仓库说明文档
+> 10 [README.md](README.md): 本仓库说明文档
 
 ## 许可证
 

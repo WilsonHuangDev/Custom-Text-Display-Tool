@@ -57,7 +57,7 @@ jobs:
       run: |
         rm "CustomTextDisplayTool/Bin" -Recurse -Force -ErrorAction Continue
         mkdir -p "CustomTextDisplayTool/Bin"
-        mv -Path "dist/CustomTextDisplayTool/*" -Destination "CustomTextDisplayTool/Bin/" -Recurse -Force
+        mv -Path "dist/CustomTextDisplayTool/*" -Destination "CustomTextDisplayTool/Bin/" -Force
         ls CustomTextDisplayTool -Recurse -Force
 
     - name: Configure SSH
@@ -92,7 +92,7 @@ jobs:
     - name: Create Installer
       run: |
         Start-Process -FilePath 'C:/Program Files (x86)/NSIS/makensis.exe' -ArgumentList 'NSIS/CustomTextDisplayTool.nsi' -NoNewWindow -Wait
-        mv NSIS/CustomTextDisplayTool_Setup.exe release/
+        mv -Path "NSIS/CustomTextDisplayTool_Setup.exe" -Destination "release/" -Force
 
     - name: Upload Installer to GitHub Actions
       uses: actions/upload-artifact@v4
@@ -104,7 +104,7 @@ jobs:
       run: |
         rm "CustomTextDisplayTool/Bin" -Recurse -Force -ErrorAction Continue
         mkdir -p "CustomTextDisplayTool/Bin"
-        mv -Path "dist/CustomTextDisplayTool_bsdnsxx/CustomTextDisplayTool/*" -Destination "CustomTextDisplayTool/Bin/" -Recurse -Force
+        mv -Path "dist/CustomTextDisplayTool_bsdnsxx/CustomTextDisplayTool/*" -Destination "CustomTextDisplayTool/Bin/" -Force
         ls CustomTextDisplayTool -Recurse -Force
 
     - name: Create Installer

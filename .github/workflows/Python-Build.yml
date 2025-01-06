@@ -78,7 +78,7 @@ jobs:
 
     - name: Commit and push the EXE to the repository
       run: |
-        git add -v 'CustomTextDisplayTool\Bin/\*'
+        git add -A
         git commit -m "Add generated EXE files"
         git push origin ${{ github.ref_name }}
       env:

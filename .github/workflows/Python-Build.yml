@@ -60,6 +60,22 @@ jobs:
         mv -Path "dist/CustomTextDisplayTool/*" -Destination "CustomTextDisplayTool/Bin/" -Force
         ls CustomTextDisplayTool -Recurse -Force
 
+    - name: Install NSIS
+      run: |
+        Start-Process -FilePath 'NSIS\nsis-3.08-setup.exe' -ArgumentList '/S' -NoNewWindow -Wait
+        echo 'Installed successfully.'
+
+    - name: Create Installer
+      run: |
+        Start-Process -FilePath 'C:/Program Files (x86)/NSIS/makensis.exe' -ArgumentList 'NSIS/CustomTextDisplayTool.nsi' -NoNewWindow -Wait
+        mv -Path "NSIS/CustomTextDisplayTool_Setup.exe" -Destination "release/" -Force
+
+    - name: Upload Installer to GitHub Actions
+      uses: actions/upload-artifact@v4
+      with:
+        name: CustomTextDisplayTool_Installer
+        path: release/CustomTextDisplayTool_Setup.exe
+
     - name: Configure SSH
       run: |
         mkdir -p ~/.ssh
@@ -83,22 +99,6 @@ jobs:
         git push origin ${{ github.ref_name }}
       env:
         GIT_SSH_COMMAND: 'ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no'
-
-    - name: Install NSIS
-      run: |
-        Start-Process -FilePath 'NSIS\nsis-3.08-setup.exe' -ArgumentList '/S' -NoNewWindow -Wait
-        echo 'Installed successfully.'
-
-    - name: Create Installer
-      run: |
-        Start-Process -FilePath 'C:/Program Files (x86)/NSIS/makensis.exe' -ArgumentList 'NSIS/CustomTextDisplayTool.nsi' -NoNewWindow -Wait
-        mv -Path "NSIS/CustomTextDisplayTool_Setup.exe" -Destination "release/" -Force
-
-    - name: Upload Installer to GitHub Actions
-      uses: actions/upload-artifact@v4
-      with:
-        name: CustomTextDisplayTool_Installer
-        path: release/CustomTextDisplayTool_Setup.exe
 
     - name: Temporary move the bsdnsxx Customized EXE to the repository
       run: |

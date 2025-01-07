@@ -60,30 +60,15 @@ jobs:
         mv -Path "dist/CustomTextDisplayTool/*" -Destination "CustomTextDisplayTool/Bin/" -Force
         ls CustomTextDisplayTool -Recurse -Force
 
-    - name: Install NSIS
-      run: |
-        Start-Process -FilePath 'NSIS\nsis-3.08-setup.exe' -ArgumentList '/S' -NoNewWindow -Wait
-        echo 'Installed successfully.'
-
-    - name: Create Installer
-      run: |
-        Start-Process -FilePath 'C:/Program Files (x86)/NSIS/makensis.exe' -ArgumentList 'NSIS/CustomTextDisplayTool.nsi' -NoNewWindow -Wait
-        mv -Path "NSIS/CustomTextDisplayTool_Setup.exe" -Destination "release/" -Force
-
-    - name: Upload Installer to GitHub Actions
-      uses: actions/upload-artifact@v4
-      with:
-        name: CustomTextDisplayTool_Installer
-        path: release/CustomTextDisplayTool_Setup.exe
-
     - name: Configure SSH
       run: |
         mkdir -p ~/.ssh
+        cd ~/.ssh
         echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
         echo "${{ secrets.SSH_SIGNING_KEY }}" > ~/.ssh/id_rsa.pub
-        cd ~/.ssh
         icacls ./id_rsa /inheritance:r /grant:r "$($env:USERNAME):(R,W)"
         icacls ./id_rsa.pub /inheritance:r /grant:r "$($env:USERNAME):(R,W)"
+        ssh-add ~/.ssh/id_rsa
         ssh-keyscan github.com >> ~/.ssh/known_hosts
         git config --global user.name 'github-actions[bot]'
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
@@ -100,6 +85,22 @@ jobs:
         git push origin ${{ github.ref_name }}
       env:
         GIT_SSH_COMMAND: 'ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no'
+
+    - name: Install NSIS
+      run: |
+        Start-Process -FilePath 'NSIS\nsis-3.08-setup.exe' -ArgumentList '/S' -NoNewWindow -Wait
+        echo 'Installed successfully.'
+
+    - name: Create Installer
+      run: |
+        Start-Process -FilePath 'C:/Program Files (x86)/NSIS/makensis.exe' -ArgumentList 'NSIS/CustomTextDisplayTool.nsi' -NoNewWindow -Wait
+        mv -Path "NSIS/CustomTextDisplayTool_Setup.exe" -Destination "release/" -Force
+
+    - name: Upload Installer to GitHub Actions
+      uses: actions/upload-artifact@v4
+      with:
+        name: CustomTextDisplayTool_Installer
+        path: release/CustomTextDisplayTool_Setup.exe
 
     - name: Temporary move the bsdnsxx Customized EXE to the repository
       run: |

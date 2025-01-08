@@ -3,10 +3,15 @@ import os
 import json
 import sys
 
+name = str("CustomTextDisplayTool")
+name_zh = str("自定义文本输出工具 北师大南山附校定制版")
+version = str("v2.9.1.0108")
+template_frame_name_zh = str("模版编辑")
+
 
 class MyApp(wx.App):
     def OnInit(self):
-        self.inputframe = InputFrame(None, title="自定义文本输出工具 v2.9.0.0104")
+        self.inputframe = InputFrame(None, title=name_zh+" "+version)
         self.inputframe.Show()
         return True
 
@@ -136,7 +141,7 @@ class InputFrame(wx.Frame):
             self.templateframe.Destroy()
         
         # 创建一个新的TemplateFrame实例
-        self.templateframe = TemplateFrame(self, title="模版编辑")
+        self.templateframe = TemplateFrame(self, title=template_frame_name_zh)
         self.templateframe.load_data(event)
         self.templateframe.Show()
 
@@ -148,7 +153,7 @@ class InputFrame(wx.Frame):
                 self.templateframe.Destroy()
 
             # 创建一个新的TemplateFrame实例
-            self.templateframe = TemplateFrame(self, title="模版编辑")
+            self.templateframe = TemplateFrame(self, title=template_frame_name_zh)
 
             config_path = self.templateframe.get_config_path()
             if os.path.exists(config_path):
@@ -331,7 +336,7 @@ class TemplateFrame(wx.Frame):
 
     def get_config_path(self):
         appdata_dir = os.getenv("APPDATA") or os.path.expanduser("~")
-        config_dir = os.path.join(appdata_dir, "CustomTextDisplayTool")
+        config_dir = os.path.join(appdata_dir, name)
         if not os.path.exists(config_dir):
             os.makedirs(config_dir)
         return os.path.join(config_dir, "config.json")

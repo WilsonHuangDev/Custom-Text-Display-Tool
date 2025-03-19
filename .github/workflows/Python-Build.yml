@@ -53,22 +53,22 @@ jobs:
         name: CustomTextDisplayTool_bsdnsxx
         path: dist/CustomTextDisplayTool_bsdnsxx/CustomTextDisplayTool/
 
-    - name: Move the EXE to the repository
+    - name: Move the EXE to the repository folder
       run: |
         rm "CustomTextDisplayTool/Bin" -Recurse -Force -ErrorAction Continue
         mkdir -p "CustomTextDisplayTool/Bin"
         mv -Path "dist/CustomTextDisplayTool/*" -Destination "CustomTextDisplayTool/Bin/" -Force
         ls CustomTextDisplayTool -Recurse -Force
 
-    - name: Install NSIS
+    - name: Install Inno Setup
       run: |
-        Start-Process -FilePath 'NSIS\nsis-3.08-setup.exe' -ArgumentList '/S' -NoNewWindow -Wait
-        echo 'Installed successfully.'
+        choco install innosetup
+        echo 'Installed Inno Setup successfully.'
 
     - name: Create Installer
       run: |
-        Start-Process -FilePath 'C:/Program Files (x86)/NSIS/makensis.exe' -ArgumentList 'NSIS/CustomTextDisplayTool.nsi' -NoNewWindow -Wait
-        mv -Path "NSIS/CustomTextDisplayTool_Setup.exe" -Destination "release/" -Force
+        ISCC.exe Installer/CustomTextDisplayTool.iss
+        mv -Path "Installer/CustomTextDisplayTool_Setup.exe" -Destination "release/" -Force
 
     - name: Upload Installer to GitHub Actions
       uses: actions/upload-artifact@v4
@@ -76,7 +76,7 @@ jobs:
         name: CustomTextDisplayTool_Installer
         path: release/CustomTextDisplayTool_Setup.exe
 
-    - name: Temporary move the bsdnsxx Customized EXE to the repository
+    - name: Temporary move the bsdnsxx Customized EXE to the repository folder
       run: |
         rm "CustomTextDisplayTool/Bin" -Recurse -Force -ErrorAction Continue
         mkdir -p "CustomTextDisplayTool/Bin"
@@ -85,13 +85,13 @@ jobs:
 
     - name: Create Installer
       run: |
-        Start-Process -FilePath 'C:/Program Files (x86)/NSIS/makensis.exe' -ArgumentList 'NSIS/CustomTextDisplayTool.nsi' -NoNewWindow -Wait
+        ISCC.exe Installer/CustomTextDisplayTool.iss
 
     - name: Upload bsdnsxx Customized Installer to GitHub Actions
       uses: actions/upload-artifact@v4
       with:
         name: CustomTextDisplayTool_bsdnsxx_Installer
-        path: NSIS/CustomTextDisplayTool_Setup.exe
+        path: Installer/CustomTextDisplayTool_Setup.exe
 
     - name: Calculate checksums
       run: |

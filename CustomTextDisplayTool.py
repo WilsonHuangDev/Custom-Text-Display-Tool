@@ -3,15 +3,15 @@ import os
 import json
 import sys
 
+
 name = str("CustomTextDisplayTool")
 name_zh = str("自定义文本输出工具")
-version = str("v2.9.1.0108")
 template_frame_name_zh = str("模版编辑")
 
 
 class MyApp(wx.App):
     def OnInit(self):
-        self.inputframe = InputFrame(None, title=name_zh+" "+version)
+        self.inputframe = InputFrame(None, title=name_zh)
         self.inputframe.Show()
         return True
 

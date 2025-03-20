@@ -59,8 +59,8 @@ body:
     id: app_version
     attributes:
       label: 应用版本
-      description: 您当前使用的软件的版本号，可以在软件主窗口的标题栏查看。
-      placeholder: 如：2.7.0.1206
+      description: 您当前使用的软件的版本号。
+      placeholder: 如：v2.7.0.1206
     validations:
       required: true
   - type: checkboxes

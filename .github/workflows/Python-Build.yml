@@ -19,10 +19,6 @@ on:
           - Stable
           - Beta
         default: 'Stable'
-      is_test_mode:
-        description: '是否处于测试发布模式'
-        required: false
-        type: boolean
 
 jobs:
   Build-Release:

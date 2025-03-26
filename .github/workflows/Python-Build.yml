@@ -4,11 +4,11 @@ on:
   workflow_dispatch:
     inputs:
       release_tag:
-        description: '发布标签'
+        description: '版本发布标签'
         required: true
         type: string
       version:
-        description: '发布版本名称'
+        description: '版本名称'
         required: true
         type: string
       release_channel:
@@ -24,8 +24,7 @@ jobs:
   Build-Release:
     runs-on: windows-latest
     env:
-      artifact_name: CustomTextDisplayTool_${{ github.event.inputs.release_tag }}_${{ github.event.inputs.release_channel }}_${{ github.event.inputs.release_channel }}
-      isTestMode: ${{ github.event.inputs.is_test_mode }}
+      artifact_name: CustomTextDisplayTool_${{ github.event.inputs.release_tag }}_${{ github.event.inputs.release_channel }}
 
     steps:
     - uses: actions/checkout@v4
@@ -128,6 +127,7 @@ jobs:
         bodyFile: release/checksums.md
         token: ${{ secrets.GITHUB_TOKEN }}
         tag: ${{ github.event_name != 'workflow_dispatch' && github.ref || github.event.inputs.release_tag }}
+        name: ${{ github.event.inputs.version }}-${{ github.event.inputs.release_channel }}
         prerelease: ${{ github.event.inputs.release_channel == Beta }}
         allowUpdates: true
         omitBodyDuringUpdate: true

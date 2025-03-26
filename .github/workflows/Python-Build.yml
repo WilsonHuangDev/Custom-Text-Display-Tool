@@ -2,10 +2,34 @@ name: Python Build and Release
 
 on:
   workflow_dispatch:
+    inputs:
+      release_tag:
+        description: '发布标签'
+        required: true
+        type: string
+      version:
+        description: '发布版本名称'
+        required: true
+        type: string
+      release_channel:
+        description: '版本发布通道'
+        required: true
+        type: choice
+        options:
+          - Stable
+          - Beta
+        default: 'Stable'
+      is_test_mode:
+        description: '是否处于测试发布模式'
+        required: false
+        type: boolean
 
 jobs:
   Build-Release:
     runs-on: windows-latest
+    env:
+      artifact_name: CustomTextDisplayTool_${{ github.event.inputs.release_tag }}_${{ github.event.inputs.release_channel }}_${{ github.event.inputs.release_channel }}
+      isTestMode: ${{ github.event.inputs.is_test_mode }}
 
     steps:
     - uses: actions/checkout@v4
@@ -19,8 +43,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pyinstaller
-        pip install wxPython
+        python -m pip install -r requirements.txt
 
     - name: Build EXE
       run: |
@@ -32,25 +55,25 @@ jobs:
     - name: Package portable EXE
       run: |
         mkdir -p release
-        Compress-Archive -Path dist/CustomTextDisplayTool.exe -DestinationPath release/CustomTextDisplayTool_Portable.zip
-        echo 'Successfully packaged "CustomTextDisplayTool_Portable".'
+        Compress-Archive -Path dist/CustomTextDisplayTool.exe -DestinationPath release/${{ env.artifact_name }}_Portable.zip
+        echo 'Successfully packaged "${{ env.artifact_name }}_Portable".'
 
     - name: Upload portable EXE to GitHub Actions
       uses: actions/upload-artifact@v4
       with:
-        name: CustomTextDisplayTool_Portable
-        path: release/CustomTextDisplayTool_Portable.zip
+        name: ${{ env.artifact_name }}_Portable
+        path: release/${{ env.artifact_name }}_Portable.zip
 
     - name: Upload EXE to GitHub Actions
       uses: actions/upload-artifact@v4
       with:
-        name: CustomTextDisplayTool
+        name: ${{ env.artifact_name }}
         path: dist/CustomTextDisplayTool/
 
     - name: Upload bsdnsxx Customized EXE to GitHub Actions
       uses: actions/upload-artifact@v4
       with:
-        name: CustomTextDisplayTool_bsdnsxx
+        name: ${{ env.artifact_name }}_bsdnsxx
         path: dist/CustomTextDisplayTool_bsdnsxx/CustomTextDisplayTool/
 
     - name: Move the EXE to the repository folder
@@ -68,13 +91,13 @@ jobs:
     - name: Create Installer
       run: |
         ISCC.exe Installer/CustomTextDisplayTool.iss
-        mv -Path "Installer/CustomTextDisplayTool_Setup.exe" -Destination "release/" -Force
+        mv -Path "Installer/CustomTextDisplayTool_Setup.exe" -Destination "release/${{ env.artifact_name }}_Setup.exe" -Force
 
     - name: Upload Installer to GitHub Actions
       uses: actions/upload-artifact@v4
       with:
-        name: CustomTextDisplayTool_Installer
-        path: release/CustomTextDisplayTool_Setup.exe
+        name: ${{ env.artifact_name }}_Installer
+        path: release/${{ env.artifact_name }}_Setup.exe
 
     - name: Temporary move the bsdnsxx Customized EXE to the repository folder
       run: |
@@ -86,12 +109,13 @@ jobs:
     - name: Create Installer
       run: |
         ISCC.exe Installer/CustomTextDisplayTool.iss
+        mv -Path "Installer/CustomTextDisplayTool_Setup.exe" -Destination "Installer/${{ env.artifact_name }}_bsdnsxx_Setup.exe" -Force
 
     - name: Upload bsdnsxx Customized Installer to GitHub Actions
       uses: actions/upload-artifact@v4
       with:
-        name: CustomTextDisplayTool_bsdnsxx_Installer
-        path: Installer/CustomTextDisplayTool_Setup.exe
+        name: ${{ env.artifact_name }}_bsdnsxx_Installer
+        path: Installer/${{ env.artifact_name }}_bsdnsxx_Setup.exe
 
     - name: Calculate checksums
       run: |
@@ -107,7 +131,9 @@ jobs:
         draft: true
         bodyFile: release/checksums.md
         token: ${{ secrets.GITHUB_TOKEN }}
-        tag: ${{ github.ref_name }}
+        tag: ${{ github.event_name != 'workflow_dispatch' && github.ref || github.event.inputs.release_tag }}
+        prerelease: ${{ github.event.inputs.release_channel == Beta }}
         allowUpdates: true
         omitBodyDuringUpdate: true
         omitNameDuringUpdate: true
+        omitPrereleaseDuringUpdate: true

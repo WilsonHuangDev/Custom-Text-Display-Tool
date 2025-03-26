@@ -15,9 +15,7 @@ on:
         description: '版本发布通道'
         required: true
         type: choice
-        options:
-          - Stable
-          - Beta
+        options: [Stable, Beta]
         default: 'Stable'
 
 jobs:
@@ -119,6 +117,8 @@ jobs:
 
     - name: Create Release
       uses: ncipollo/release-action@v1
+      env:
+          IS_PRERELEASE: ${{ github.event.inputs.release_channel == 'Beta' }}
       with:
         artifacts: |
           release/*.zip
@@ -128,7 +128,7 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         tag: ${{ github.event_name != 'workflow_dispatch' && github.ref || github.event.inputs.release_tag }}
         name: ${{ github.event.inputs.version }}-${{ github.event.inputs.release_channel }}
-        prerelease: ${{ github.event.inputs.release_channel == "Beta" }}
+        prerelease: ${{ env.IS_PRERELEASE }}
         allowUpdates: true
         omitBodyDuringUpdate: true
         omitNameDuringUpdate: true

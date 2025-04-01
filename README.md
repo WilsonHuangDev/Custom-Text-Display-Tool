@@ -28,7 +28,7 @@
 
 1. 若要提出 Bug 或新功能建议，请通过 [发起 Issue](https://github.com/WilsonHuangDev/Custom-Text-Display-Tool/issues/new/choose) 使我知晓。当然，您也可以自行 [创建 Pull Request](https://github.com/WilsonHuangDev/Custom-Text-Display-Tool/pulls) 修改。
 2. 如有定制软件等特殊需求，请通过下方联系方式与我联系。
-3. 对于本软件的使用方法，请参阅软件根目录或本仓库 `CustomTextDisplayTool` 目录下的[ `README.rtf` ](CustomTextDisplayTool/README.rtf)（`.rtf` 文件无法使用文本查看器直接打开，请下载后使用 `Microsoft Word` 等文本处理软件打开）。
+3. 对于本软件的使用方法，请参阅软件根目录或本仓库 `CustomTextDisplayTool` 目录下的  [`README.rtf`](CustomTextDisplayTool/README.rtf) (`.rtf` 文件无法使用文本查看器直接打开，请下载后使用 `Microsoft Word` 等文本处理软件打开) 。
 
 ## 联系方式
 
